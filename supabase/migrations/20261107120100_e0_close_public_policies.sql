@@ -109,7 +109,9 @@ returns boolean language sql immutable set search_path = '' as $$
     )
     and (select count(distinct f ->> 'name') = count(*) from jsonb_array_elements(p_fields) f);
 $$;
-alter table public.forms add constraint forms_fields_valid check (app.valid_form_fields(fields));
+-- NOT VALID: vynucuje se u nových a měněných řádků; stávající formuláře s neznámou strukturou migraci neblokují.
+-- Po ruční kontrole existujících formulářů lze doplnit: alter table public.forms validate constraint forms_fields_valid;
+alter table public.forms add constraint forms_fields_valid check (app.valid_form_fields(fields)) not valid;
 
 -- ---------------------------------------------------------------------------
 -- 4. Triggery: autor, updated_at/updated_by, row_version, neměnné sloupce, audit
