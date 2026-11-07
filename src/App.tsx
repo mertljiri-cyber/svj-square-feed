@@ -11,6 +11,9 @@ import IntentDetail from "./pages/IntentDetail";
 import Forms from "./pages/Forms";
 import FormDetail from "./pages/FormDetail";
 import NotFound from "./pages/NotFound";
+import Requests from "./pages/Requests";
+import RequestDetail from "./pages/RequestDetail";
+import RequestQueue from "./pages/RequestQueue";
 import Login from "./pages/Login";
 import Members from "./pages/Members";
 import { AuthProvider } from "./features/auth/AuthProvider";
@@ -27,6 +30,9 @@ const App = () => (
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Index />} />
+          <Route path="/pozadavky" element={<Requests />} />
+          <Route path="/pozadavky/fronta" element={<RequestQueue />} />
+          <Route path="/pozadavky/:id" element={<RequestDetail />} />
           <Route path="/novinky" element={<News />} />
           <Route path="/novinky/:id" element={<NewsDetail />} />
           <Route path="/prihlaseni" element={<Login />} />

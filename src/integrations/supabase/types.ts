@@ -152,6 +152,50 @@ export type Database = {
         }
         Relationships: []
       }
+      request_events: {
+        Row: {
+          id: number
+          organization_id: string
+          request_id: string
+          actor_user_id: string | null
+          event_type: string
+          from_status: string | null
+          to_status: string | null
+          note: string | null
+          internal: boolean
+          details: Json
+          occurred_at: string
+        }
+        Insert: Record<string, never>
+        Update: Record<string, never>
+        Relationships: []
+      }
+      requests: {
+        Row: {
+          id: string
+          organization_id: string
+          number: number
+          author_user_id: string
+          type: string
+          title: string
+          description: string
+          location: string | null
+          asset_ref: string | null
+          visibility: string
+          workflow_status: string
+          triage_priority: string | null
+          assignee_user_id: string | null
+          due_on: string | null
+          resolution_text: string | null
+          duplicate_of: string | null
+          created_at: string
+          updated_at: string
+          row_version: number
+        }
+        Insert: Record<string, never>
+        Update: Record<string, never>
+        Relationships: []
+      }
       settings: {
         Row: {
           id: string
@@ -190,6 +234,11 @@ export type Database = {
       list_members: { Args: { p_organization_id: string }; Returns: Json }
       submit_intent: { Args: { p_organization_id: string; p_title: string; p_description: string; p_proposer_name: string | null }; Returns: string }
       change_intent_status: { Args: { p_intent_id: string; p_status: string; p_expected_row_version: number }; Returns: number }
+      create_request: { Args: { p_organization_id: string; p_type: string; p_title: string; p_description: string; p_location?: string | null; p_asset_ref?: string | null; p_idempotency_key?: string | null }; Returns: Json }
+      add_request_comment: { Args: { p_request_id: string; p_body: string; p_internal?: boolean }; Returns: number }
+      request_reopen: { Args: { p_request_id: string; p_reason: string; p_expected_row_version: number }; Returns: number }
+      change_request_status: { Args: { p_request_id: string; p_to: string; p_expected_row_version: number; p_note?: string | null; p_assignee?: string | null; p_due_on?: string | null; p_resolution?: string | null; p_duplicate_of?: string | null; p_priority?: string | null }; Returns: number }
+      request_people: { Args: { p_request_ids: string[] }; Returns: { user_id: string; display_name: string | null }[] }
       submit_form: { Args: { p_form_id: string; p_data: Json }; Returns: string }
     }
     Enums: {
