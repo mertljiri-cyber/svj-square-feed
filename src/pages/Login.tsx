@@ -52,6 +52,17 @@ export default function Login() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [session]);
 
+  async function signInWithGoogle() {
+    setBusy(true);
+    setMessage("");
+    const result = await lovable.auth.signInWithOAuth("google", {
+      redirect_uri: window.location.origin + "/prihlaseni" + window.location.hash,
+    });
+    if (result.redirected) return;
+    setBusy(false);
+    if (result.error) setMessage("Přihlášení přes Google se nezdařilo.");
+  }
+
   async function submit(e: React.FormEvent) {
     e.preventDefault();
     setBusy(true);
