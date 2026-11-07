@@ -15,6 +15,8 @@ import TechnicalRegister from "./pages/TechnicalRegister";
 import TechnicalAssetDetail from "./pages/TechnicalAssetDetail";
 import RepairPlan from "./pages/RepairPlan";
 import VerificationOverview from "./pages/VerificationOverview";
+import Documents from "./pages/Documents";
+import DocumentDetail from "./pages/DocumentDetail";
 import Requests from "./pages/Requests";
 import RequestDetail from "./pages/RequestDetail";
 import RequestQueue from "./pages/RequestQueue";
@@ -37,6 +39,8 @@ const App = () => (
           <Route path="/technicky-prehled" element={<TechnicalRegister />} />
           <Route path="/technicky-prehled/:id" element={<TechnicalAssetDetail />} />
           <Route path="/plan-oprav" element={<RepairPlan />} />
+          <Route path="/dokumenty" element={<Documents />} />
+          <Route path="/dokumenty/:id" element={<DocumentDetail />} />
           <Route path="/pozadavky" element={<Requests />} />
           <Route path="/pozadavky/fronta" element={<RequestQueue />} />
           <Route path="/pozadavky/:id" element={<RequestDetail />} />
