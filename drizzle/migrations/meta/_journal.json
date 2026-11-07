@@ -15,6 +15,13 @@
       "when": 1794090935709,
       "tag": "0001_e0_close_public_policies",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1794090985550,
+      "tag": "0002_e3_requests",
+      "breakpoints": true
     }
   ]
 }

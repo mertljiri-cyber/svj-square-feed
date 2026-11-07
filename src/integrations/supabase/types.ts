@@ -432,6 +432,79 @@ export type Database = {
           },
         ]
       }
+      notification_outbox: {
+        Row: {
+          channel: string
+          created_at: string
+          event_id: number | null
+          id: string
+          idempotency_key: string
+          kind: string
+          last_error: string | null
+          organization_id: string
+          provider_message_id: string | null
+          recipient_user_id: string
+          request_id: string
+          retry_count: number
+          sent_at: string | null
+          status: string
+        }
+        Insert: {
+          channel?: string
+          created_at?: string
+          event_id?: number | null
+          id?: string
+          idempotency_key: string
+          kind: string
+          last_error?: string | null
+          organization_id: string
+          provider_message_id?: string | null
+          recipient_user_id: string
+          request_id: string
+          retry_count?: number
+          sent_at?: string | null
+          status?: string
+        }
+        Update: {
+          channel?: string
+          created_at?: string
+          event_id?: number | null
+          id?: string
+          idempotency_key?: string
+          kind?: string
+          last_error?: string | null
+          organization_id?: string
+          provider_message_id?: string | null
+          recipient_user_id?: string
+          request_id?: string
+          retry_count?: number
+          sent_at?: string | null
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "notification_outbox_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "request_events"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "notification_outbox_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "notification_outbox_organization_id_request_id_fkey"
+            columns: ["organization_id", "request_id"]
+            isOneToOne: false
+            referencedRelation: "requests"
+            referencedColumns: ["organization_id", "id"]
+          },
+        ]
+      }
       organizations: {
         Row: {
           created_at: string
@@ -473,6 +546,163 @@ export type Database = {
           user_id?: string
         }
         Relationships: []
+      }
+      request_counters: {
+        Row: {
+          last_number: number
+          organization_id: string
+        }
+        Insert: {
+          last_number?: number
+          organization_id: string
+        }
+        Update: {
+          last_number?: number
+          organization_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "request_counters_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: true
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      request_events: {
+        Row: {
+          actor_user_id: string | null
+          details: Json
+          event_type: string
+          from_status: string | null
+          id: number
+          internal: boolean
+          note: string | null
+          occurred_at: string
+          organization_id: string
+          request_id: string
+          to_status: string | null
+        }
+        Insert: {
+          actor_user_id?: string | null
+          details?: Json
+          event_type: string
+          from_status?: string | null
+          id?: never
+          internal?: boolean
+          note?: string | null
+          occurred_at?: string
+          organization_id: string
+          request_id: string
+          to_status?: string | null
+        }
+        Update: {
+          actor_user_id?: string | null
+          details?: Json
+          event_type?: string
+          from_status?: string | null
+          id?: never
+          internal?: boolean
+          note?: string | null
+          occurred_at?: string
+          organization_id?: string
+          request_id?: string
+          to_status?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "request_events_organization_id_request_id_fkey"
+            columns: ["organization_id", "request_id"]
+            isOneToOne: false
+            referencedRelation: "requests"
+            referencedColumns: ["organization_id", "id"]
+          },
+        ]
+      }
+      requests: {
+        Row: {
+          asset_ref: string | null
+          assignee_user_id: string | null
+          author_user_id: string
+          created_at: string
+          description: string
+          due_on: string | null
+          duplicate_of: string | null
+          id: string
+          idempotency_key: string | null
+          location: string | null
+          number: number
+          organization_id: string
+          resolution_text: string | null
+          row_version: number
+          title: string
+          triage_priority: string | null
+          type: string
+          updated_at: string
+          visibility: string
+          workflow_status: string
+        }
+        Insert: {
+          asset_ref?: string | null
+          assignee_user_id?: string | null
+          author_user_id: string
+          created_at?: string
+          description: string
+          due_on?: string | null
+          duplicate_of?: string | null
+          id?: string
+          idempotency_key?: string | null
+          location?: string | null
+          number: number
+          organization_id: string
+          resolution_text?: string | null
+          row_version?: number
+          title: string
+          triage_priority?: string | null
+          type: string
+          updated_at?: string
+          visibility?: string
+          workflow_status?: string
+        }
+        Update: {
+          asset_ref?: string | null
+          assignee_user_id?: string | null
+          author_user_id?: string
+          created_at?: string
+          description?: string
+          due_on?: string | null
+          duplicate_of?: string | null
+          id?: string
+          idempotency_key?: string | null
+          location?: string | null
+          number?: number
+          organization_id?: string
+          resolution_text?: string | null
+          row_version?: number
+          title?: string
+          triage_priority?: string | null
+          type?: string
+          updated_at?: string
+          visibility?: string
+          workflow_status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "requests_organization_id_duplicate_of_fkey"
+            columns: ["organization_id", "duplicate_of"]
+            isOneToOne: false
+            referencedRelation: "requests"
+            referencedColumns: ["organization_id", "id"]
+          },
+          {
+            foreignKeyName: "requests_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       scoped_grants: {
         Row: {
@@ -568,11 +798,29 @@ export type Database = {
     }
     Functions: {
       accept_invitation: { Args: { p_token: string }; Returns: Json }
+      add_request_comment: {
+        Args: { p_body: string; p_internal?: boolean; p_request_id: string }
+        Returns: number
+      }
       change_intent_status: {
         Args: {
           p_expected_row_version: number
           p_intent_id: string
           p_status: string
+        }
+        Returns: number
+      }
+      change_request_status: {
+        Args: {
+          p_assignee?: string
+          p_due_on?: string
+          p_duplicate_of?: string
+          p_expected_row_version: number
+          p_note?: string
+          p_priority?: string
+          p_request_id: string
+          p_resolution?: string
+          p_to: string
         }
         Returns: number
       }
@@ -582,6 +830,18 @@ export type Database = {
           p_organization_id: string
           p_role?: string
           p_valid_days?: number
+        }
+        Returns: Json
+      }
+      create_request: {
+        Args: {
+          p_asset_ref?: string
+          p_description: string
+          p_idempotency_key?: string
+          p_location?: string
+          p_organization_id: string
+          p_title: string
+          p_type: string
         }
         Returns: Json
       }
@@ -609,6 +869,21 @@ export type Database = {
         }[]
       }
       my_context: { Args: never; Returns: Json }
+      request_people: {
+        Args: { p_request_ids: string[] }
+        Returns: {
+          display_name: string
+          user_id: string
+        }[]
+      }
+      request_reopen: {
+        Args: {
+          p_expected_row_version: number
+          p_reason: string
+          p_request_id: string
+        }
+        Returns: number
+      }
       revoke_invitation: {
         Args: { p_invitation_id: string }
         Returns: undefined
