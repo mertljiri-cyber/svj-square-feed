@@ -64,18 +64,24 @@ export type Database = {
           data: Json
           form_id: string | null
           id: string
+          organization_id: string
+          submitted_by: string | null
         }
         Insert: {
           created_at?: string
           data?: Json
           form_id?: string | null
           id?: string
+          organization_id: string
+          submitted_by?: string | null
         }
         Update: {
           created_at?: string
           data?: Json
           form_id?: string | null
           id?: string
+          organization_id?: string
+          submitted_by?: string | null
         }
         Relationships: [
           {
@@ -85,70 +91,118 @@ export type Database = {
             referencedRelation: "forms"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "form_submissions_form_same_org_fk"
+            columns: ["organization_id", "form_id"]
+            isOneToOne: false
+            referencedRelation: "forms"
+            referencedColumns: ["organization_id", "id"]
+          },
+          {
+            foreignKeyName: "form_submissions_org_fk"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
         ]
       }
       forms: {
         Row: {
-          active: boolean | null
+          active: boolean
           created_at: string
           description: string | null
-          fields: Json | null
+          fields: Json
           id: string
-          submit_target: string | null
-          title: string
-        }
-        Insert: {
-          active?: boolean | null
-          created_at?: string
-          description?: string | null
-          fields?: Json | null
-          id?: string
-          submit_target?: string | null
-          title: string
-        }
-        Update: {
-          active?: boolean | null
-          created_at?: string
-          description?: string | null
-          fields?: Json | null
-          id?: string
-          submit_target?: string | null
-          title?: string
-        }
-        Relationships: []
-      }
-      intents: {
-        Row: {
-          created_at: string
-          description: string | null
-          id: string
-          priority: string | null
-          proposer_name: string | null
-          status: string | null
+          organization_id: string
+          submit_target: string
           title: string
           updated_at: string
         }
         Insert: {
+          active?: boolean
           created_at?: string
           description?: string | null
+          fields?: Json
           id?: string
-          priority?: string | null
-          proposer_name?: string | null
-          status?: string | null
+          organization_id: string
+          submit_target?: string
           title: string
           updated_at?: string
         }
         Update: {
+          active?: boolean
           created_at?: string
           description?: string | null
+          fields?: Json
           id?: string
-          priority?: string | null
-          proposer_name?: string | null
-          status?: string | null
+          organization_id?: string
+          submit_target?: string
           title?: string
           updated_at?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "forms_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      intents: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          description: string | null
+          id: string
+          organization_id: string
+          priority: string
+          proposer_name: string | null
+          row_version: number
+          status: string
+          title: string
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          id?: string
+          organization_id: string
+          priority?: string
+          proposer_name?: string | null
+          row_version?: number
+          status?: string
+          title: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          id?: string
+          organization_id?: string
+          priority?: string
+          proposer_name?: string | null
+          row_version?: number
+          status?: string
+          title?: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "intents_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       invitations: {
         Row: {
@@ -315,45 +369,68 @@ export type Database = {
           author: string | null
           content: string | null
           created_at: string
+          created_by: string | null
           id: string
           image: string | null
+          organization_id: string
           perex: string | null
           pinned: boolean | null
           published_at: string | null
-          status: string | null
+          row_version: number
+          status: string
           tags: string[] | null
           title: string
           updated_at: string
+          updated_by: string | null
+          visibility: string
         }
         Insert: {
           author?: string | null
           content?: string | null
           created_at?: string
+          created_by?: string | null
           id?: string
           image?: string | null
+          organization_id: string
           perex?: string | null
           pinned?: boolean | null
           published_at?: string | null
-          status?: string | null
+          row_version?: number
+          status?: string
           tags?: string[] | null
           title: string
           updated_at?: string
+          updated_by?: string | null
+          visibility?: string
         }
         Update: {
           author?: string | null
           content?: string | null
           created_at?: string
+          created_by?: string | null
           id?: string
           image?: string | null
+          organization_id?: string
           perex?: string | null
           pinned?: boolean | null
           published_at?: string | null
-          status?: string | null
+          row_version?: number
+          status?: string
           tags?: string[] | null
           title?: string
           updated_at?: string
+          updated_by?: string | null
+          visibility?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "news_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       organizations: {
         Row: {
@@ -450,23 +527,40 @@ export type Database = {
       settings: {
         Row: {
           id: string
+          is_public: boolean
           key: string
+          organization_id: string
           updated_at: string
+          updated_by: string | null
           value: string | null
         }
         Insert: {
           id?: string
+          is_public?: boolean
           key: string
+          organization_id: string
           updated_at?: string
+          updated_by?: string | null
           value?: string | null
         }
         Update: {
           id?: string
+          is_public?: boolean
           key?: string
+          organization_id?: string
           updated_at?: string
+          updated_by?: string | null
           value?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "settings_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
       }
     }
     Views: {
@@ -474,6 +568,14 @@ export type Database = {
     }
     Functions: {
       accept_invitation: { Args: { p_token: string }; Returns: Json }
+      change_intent_status: {
+        Args: {
+          p_expected_row_version: number
+          p_intent_id: string
+          p_status: string
+        }
+        Returns: number
+      }
       create_invitation: {
         Args: {
           p_email: string
@@ -520,6 +622,19 @@ export type Database = {
           p_status: string
         }
         Returns: number
+      }
+      submit_form: {
+        Args: { p_data: Json; p_form_id: string }
+        Returns: string
+      }
+      submit_intent: {
+        Args: {
+          p_description: string
+          p_organization_id: string
+          p_proposer_name: string
+          p_title: string
+        }
+        Returns: string
       }
     }
     Enums: {

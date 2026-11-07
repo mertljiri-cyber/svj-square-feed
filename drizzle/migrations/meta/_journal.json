@@ -8,6 +8,13 @@
       "when": 1794090890377,
       "tag": "0000_e0_identity_roles_audit",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1794090935709,
+      "tag": "0001_e0_close_public_policies",
+      "breakpoints": true
     }
   ]
 }
