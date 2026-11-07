@@ -1,4 +1,5 @@
 import { useMemo, useState } from "react";
+import { Link } from "react-router-dom";
 import { Search, Wrench, MapPin } from "lucide-react";
 import { Layout } from "@/components/layout/Layout";
 import { Input } from "@/components/ui/input";
@@ -24,7 +25,7 @@ export default function TechnicalRegister() {
           <p className="text-muted-foreground">Přehled společných částí a technologií domu na jednom místě.</p>
         </div>
         <div className="mb-8 rounded-xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-950">
-          <strong>Pracovní náhled ze stávajícího registru.</strong> Stav prvků zatím nebyl ověřen. Kritičnost označuje význam prvku, nikoliv jeho aktuální závadu. Údaje nelze zatím upravovat.
+          <strong>Pracovní náhled ze stávajícího registru.</strong> Stav prvků zatím nebyl ověřen. Kritičnost označuje význam prvku, nikoliv jeho aktuální závadu. Rozpracovaný plán ověření lze uložit pouze v tomto prohlížeči.
         </div>
         <div className="mb-8 grid gap-4 sm:grid-cols-3">
           {[['Evidovaných prvků', items.length], ['Vysoká kritičnost', items.filter((item) => item.criticality === 'Vysoká').length], ['Stav k ověření', items.filter((item) => item.state === 'Nezjištěno').length]].map(([label, value]) => (
@@ -36,11 +37,11 @@ export default function TechnicalRegister() {
           <label className="flex items-center gap-2 text-sm text-muted-foreground">Kritičnost <select value={criticality} onChange={(e) => setCriticality(e.target.value)} className="h-10 rounded-md border bg-background px-3 text-foreground"><option>Všechny</option><option>Vysoká</option><option>Střední</option><option>Nízká</option></select></label>
         </div>
         <p className="mb-4 text-sm text-muted-foreground">Zobrazeno {filtered.length} z {items.length} prvků</p>
-        {filtered.length ? <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">{filtered.map((item) => <article key={item.id} className="rounded-xl border bg-card p-5">
+        {filtered.length ? <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">{filtered.map((item) => <Link to={`/technicky-prehled/${item.id}`} key={item.id} className="block rounded-xl border bg-card p-5 transition-shadow hover:shadow-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary">
           <div className="mb-4 flex items-start justify-between gap-3"><div className="rounded-lg bg-primary/10 p-2 text-primary"><Wrench className="h-5 w-5" /></div><span className="rounded-full bg-secondary px-3 py-1 text-xs font-medium">{item.criticality} kritičnost</span></div>
           <p className="mb-1 text-xs text-muted-foreground">{item.id} · {item.area}</p><h2 className="mb-3 font-semibold">{item.name}</h2>
           <p className="mb-4 flex items-start gap-2 text-sm text-muted-foreground"><MapPin className="mt-0.5 h-4 w-4 shrink-0" />{item.location}</p><p className="border-t pt-3 text-sm">Stav: <span className="font-medium">{item.state}</span></p>
-        </article>)}</div> : <p className="rounded-xl border border-dashed p-8 text-center text-muted-foreground">Žádné prvky neodpovídají filtru.</p>}
+        <p className="mt-3 text-sm font-medium text-primary">Zobrazit detail →</p></Link>)}</div> : <p className="rounded-xl border border-dashed p-8 text-center text-muted-foreground">Žádné prvky neodpovídají filtru.</p>}
         <p className="mt-8 text-xs text-muted-foreground">Zdroj: technický registr SVJ, podklad ze 7. 11. 2026. Čtyři prázdné rezervní řádky nejsou zobrazeny.</p>
       </div>
     </Layout>
