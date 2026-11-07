@@ -54,3 +54,20 @@ Build (`npm run build`), TypeScript (`tsc -p tsconfig.app.json`) a lint nových 
 5. **Veřejné formuláře a záměry** – podle návrhu nejsou čitelné anonymně. Pokud má být některý formulář veřejný, je to změna politiky a musí ji schválit výbor.
 6. **Prototyp (E2/E3)** – stránky registru, plánu oprav a požadavků zůstávají nezměněné a bez vazby na databázi.
 7. **Zálohy a obnova v produkci (SEC-07)** – ověřena je pouze syntetická obnova PGlite. Retence, RPO/RTO a odpovědná osoba jsou neurčené.
+
+## Kontrolní formulář předání implementace
+
+| Pole | Hodnota |
+|---|---|
+| Výchozí HEAD / výsledný commit | `d9e67ec92fda83c2fef627f17f2d8e1690bb894c` → `9a2e49a` (větev `e0-bezpecnost`) plus následný commit s testem EXECUTE, pokud byl vytvořen |
+| Dokončené karty | SEC-01 (částečně: lokální baseline, bez testovacího Supabase), SEC-02, SEC-03, SEC-04, SEC-05 lokálně ověřeno. SEC-06 a SEC-07 částečně |
+| Změněné tabulky a politiky | Nové: organizations, profiles, memberships, membership_roles, scoped_grants, invitations, audit_events. Změněné: news, intents, forms, form_submissions, settings (sloupce, granty po sloupcích, nové politiky, staré `USING(true)`/`WITH CHECK(true)` odstraněny) |
+| Provedené testy a prostředí | `npm test`: 39 testů, PGlite (PostgreSQL 17), syntetické role. `tsc`, `vite build`, `eslint` bez chyb. Datum 7. 11. 2026 |
+| Neprovedené kontroly | Skutečný Supabase Auth, PostgREST, Storage, MFA, reset hesla, limity na úrovni Auth, test v prohlížeči. Dopad: pokrytí RLS je ověřené, tok přihlášení nikoli |
+| Nasazení | Pouze lokálně. Testovací ani produkční Supabase nedotčeny, nic nepublikováno |
+| Vrácení změny | Migrace jsou inkrementální. Zpět lze vrátit zálohou DB před aplikací; obnovení veřejných politik se nesmí používat jako návrat. Postup obnovy ověřen pouze na syntetické DB (T-OPS-01) |
+| Zbývající vstupy | O01, O02, O03, O04 (viz 11_ROZHODNUTI_A_OTAZKY.md). Dále rozhodnutí, zda mají být některé formuláře veřejné |
+
+### SEC-06 – klasifikace `.env`
+
+Soubor obsahuje tři klíče: `VITE_SUPABASE_PROJECT_ID`, `VITE_SUPABASE_URL`, `VITE_SUPABASE_PUBLISHABLE_KEY`. Publishable klíč je JWT s rolí `anon` a odkazem na stejný projekt jako URL, tedy veřejná konfigurace, ne serverový secret. V historii Gitu je soubor v jediném commitu (`b3f25c9`) a obsahuje jen tytéž tři názvy. Serverový klíč (`service_role`) není v `src` ani v build výstupu, což hlídá test. Rotace není na základě těchto nálezů nutná. Soubor generuje Lovable, proto jsem ho nevyjímal z verzování.
