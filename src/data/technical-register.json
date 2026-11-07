@@ -1,0 +1,191 @@
+[
+  {
+    "row": "4",
+    "id": "T-001",
+    "area": "Střecha",
+    "name": "Střešní plášť a hydroizolace",
+    "location": "Všechny objekty / střecha",
+    "criticality": "Vysoká",
+    "state": "Nezjištěno"
+  },
+  {
+    "row": "5",
+    "id": "T-002",
+    "area": "Střecha",
+    "name": "Klempířské prvky a odvodnění střechy",
+    "location": "Všechny objekty / střecha",
+    "criticality": "Střední",
+    "state": "Nezjištěno"
+  },
+  {
+    "row": "6",
+    "id": "T-003",
+    "area": "Obvodový plášť",
+    "name": "Fasáda, spáry, zateplení",
+    "location": "Všechny fasády",
+    "criticality": "Střední",
+    "state": "Nezjištěno"
+  },
+  {
+    "row": "7",
+    "id": "T-004",
+    "area": "Obvodový plášť",
+    "name": "Balkony / lodžie a zábradlí",
+    "location": "Dle prohlášení vlastníka",
+    "criticality": "Vysoká",
+    "state": "Nezjištěno"
+  },
+  {
+    "row": "8",
+    "id": "T-005",
+    "area": "Nosné konstrukce",
+    "name": "Nosné konstrukce, trhliny, statické projevy",
+    "location": "Celý dům",
+    "criticality": "Vysoká",
+    "state": "Nezjištěno"
+  },
+  {
+    "row": "9",
+    "id": "T-006",
+    "area": "Spodní stavba",
+    "name": "Základy, hydroizolace, vlhkost",
+    "location": "Suterén / obvod domu",
+    "criticality": "Vysoká",
+    "state": "Nezjištěno"
+  },
+  {
+    "row": "10",
+    "id": "T-007",
+    "area": "Interiéry",
+    "name": "Společné chodby a schodiště",
+    "location": "Všechny vchody",
+    "criticality": "Nízká",
+    "state": "Nezjištěno"
+  },
+  {
+    "row": "11",
+    "id": "T-008",
+    "area": "Vstupy",
+    "name": "Vstupní dveře, zámky, zavírače",
+    "location": "Všechny vchody",
+    "criticality": "Střední",
+    "state": "Nezjištěno"
+  },
+  {
+    "row": "12",
+    "id": "T-009",
+    "area": "Okna",
+    "name": "Okna ve společných částech",
+    "location": "Společné prostory",
+    "criticality": "Nízká",
+    "state": "Nezjištěno"
+  },
+  {
+    "row": "13",
+    "id": "T-010",
+    "area": "ZTI",
+    "name": "Rozvody studené a teplé vody",
+    "location": "Stoupačky a společné rozvody",
+    "criticality": "Vysoká",
+    "state": "Nezjištěno"
+  },
+  {
+    "row": "14",
+    "id": "T-011",
+    "area": "ZTI",
+    "name": "Kanalizace a odpadní potrubí",
+    "location": "Stoupačky a ležaté rozvody",
+    "criticality": "Vysoká",
+    "state": "Nezjištěno"
+  },
+  {
+    "row": "15",
+    "id": "T-012",
+    "area": "Vytápění",
+    "name": "Rozvody vytápění / předávací části",
+    "location": "Společné části",
+    "criticality": "Vysoká",
+    "state": "Nezjištěno"
+  },
+  {
+    "row": "16",
+    "id": "T-013",
+    "area": "TUV",
+    "name": "Příprava a cirkulace TUV",
+    "location": "Společné části",
+    "criticality": "Vysoká",
+    "state": "Nezjištěno"
+  },
+  {
+    "row": "17",
+    "id": "T-014",
+    "area": "Elektro",
+    "name": "Hlavní a společné elektroinstalace",
+    "location": "Rozvaděče, chodby, společné prostory",
+    "criticality": "Vysoká",
+    "state": "Nezjištěno"
+  },
+  {
+    "row": "18",
+    "id": "T-015",
+    "area": "Elektro",
+    "name": "Společné osvětlení",
+    "location": "Chodby, sklepy, vstupy",
+    "criticality": "Střední",
+    "state": "Nezjištěno"
+  },
+  {
+    "row": "19",
+    "id": "T-016",
+    "area": "Hromosvod",
+    "name": "Ochrana před bleskem / uzemnění",
+    "location": "Střecha a společné části",
+    "criticality": "Vysoká",
+    "state": "Nezjištěno"
+  },
+  {
+    "row": "20",
+    "id": "T-017",
+    "area": "Požární bezpečnost",
+    "name": "Požární uzávěry, značení, hasicí prostředky",
+    "location": "Společné prostory",
+    "criticality": "Vysoká",
+    "state": "Nezjištěno"
+  },
+  {
+    "row": "21",
+    "id": "T-018",
+    "area": "Komunikace",
+    "name": "Domovní telefony, zvonky, přístupový systém",
+    "location": "Všechny vchody",
+    "criticality": "Střední",
+    "state": "Nezjištěno"
+  },
+  {
+    "row": "22",
+    "id": "T-019",
+    "area": "Sklepy",
+    "name": "Sklepní prostory, vlhkost, konstrukce",
+    "location": "Suterén",
+    "criticality": "Střední",
+    "state": "Nezjištěno"
+  },
+  {
+    "row": "23",
+    "id": "T-020",
+    "area": "Pozemek",
+    "name": "Plot, brány, zpevněné plochy",
+    "location": "Pozemek SVJ",
+    "criticality": "Střední",
+    "state": "Nezjištěno"
+  },
+  {
+    "row": "24",
+    "id": "T-021",
+    "area": "Technologie",
+    "name": "Ostatní společná technická zařízení",
+    "location": "Dle vybavení domu",
+    "criticality": "Střední",
+    "state": "Nezjištěno"
+  }
+]

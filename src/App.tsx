@@ -11,6 +11,10 @@ import IntentDetail from "./pages/IntentDetail";
 import Forms from "./pages/Forms";
 import FormDetail from "./pages/FormDetail";
 import NotFound from "./pages/NotFound";
+import TechnicalRegister from "./pages/TechnicalRegister";
+import TechnicalAssetDetail from "./pages/TechnicalAssetDetail";
+import RepairPlan from "./pages/RepairPlan";
+import VerificationOverview from "./pages/VerificationOverview";
 import Requests from "./pages/Requests";
 import RequestDetail from "./pages/RequestDetail";
 import RequestQueue from "./pages/RequestQueue";
@@ -30,9 +34,13 @@ const App = () => (
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Index />} />
+          <Route path="/technicky-prehled" element={<TechnicalRegister />} />
+          <Route path="/technicky-prehled/:id" element={<TechnicalAssetDetail />} />
+          <Route path="/plan-oprav" element={<RepairPlan />} />
           <Route path="/pozadavky" element={<Requests />} />
           <Route path="/pozadavky/fronta" element={<RequestQueue />} />
           <Route path="/pozadavky/:id" element={<RequestDetail />} />
+          <Route path="/revize-a-overeni" element={<VerificationOverview />} />
           <Route path="/novinky" element={<News />} />
           <Route path="/novinky/:id" element={<NewsDetail />} />
           <Route path="/prihlaseni" element={<Login />} />

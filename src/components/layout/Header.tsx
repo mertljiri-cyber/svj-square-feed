@@ -1,5 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
-import { Building2, Newspaper, Lightbulb, FileText, Menu, X, ClipboardList } from "lucide-react";
+import { Building2, Newspaper, Lightbulb, FileText, Menu, X, Wrench, CalendarDays, ClipboardList } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 
@@ -7,6 +7,8 @@ const navigation = [
   { name: "Úvod", href: "/", icon: Building2 },
   { name: "Novinky", href: "/novinky", icon: Newspaper },
   { name: "Záměry", href: "/zamery", icon: Lightbulb },
+  { name: "Technický přehled", href: "/technicky-prehled", icon: Wrench },
+  { name: "Plán oprav", href: "/plan-oprav", icon: CalendarDays },
   { name: "Požadavky", href: "/pozadavky", icon: ClipboardList },
   { name: "Formuláře", href: "/formulare", icon: FileText },
 ];

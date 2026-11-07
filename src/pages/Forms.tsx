@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { Layout } from "@/components/layout/Layout";
 import { FormCard } from "@/components/forms/FormCard";
@@ -27,6 +28,8 @@ export default function Forms() {
             Vyberte si formulář pro komunikaci s výborem SVJ
           </p>
         </div>
+
+        <Link to="/pozadavky" className="mb-8 block rounded-xl border bg-card p-5 transition-shadow hover:shadow-md"><h2 className="font-semibold text-primary">Moje požadavky →</h2><p className="mt-1 text-sm text-muted-foreground">Nahlaste závadu, dotaz nebo návrh a sledujte jeho vyřízení.</p></Link>
 
         {isLoading ? (
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
