@@ -42,22 +42,17 @@ export default function FormDetail() {
 
   const submitMutation = useMutation({
     mutationFn: async (data: Record<string, string>) => {
-      // If it's an intent form, create a new intent
+      // Veškerá validace a zápis jsou na serveru (RPC); klient ji jen předvyplňuje.
       if (form?.submit_target === "intent") {
-        const { error } = await supabase.from("intents").insert({
-          title: data.title || "Nový záměr",
-          description: data.description || "",
-          proposer_name: data.proposer_name || "Anonymní",
-          status: "navrh",
-          priority: "medium",
+        const { error } = await supabase.rpc("submit_intent", {
+          p_organization_id: form.organization_id,
+          p_title: data.title ?? "",
+          p_description: data.description ?? "",
+          p_proposer_name: data.proposer_name ?? null,
         });
         if (error) throw error;
       } else {
-        // Otherwise, save to form_submissions
-        const { error } = await supabase.from("form_submissions").insert({
-          form_id: id,
-          data: data,
-        });
+        const { error } = await supabase.rpc("submit_form", { p_form_id: id!, p_data: data });
         if (error) throw error;
       }
     },
@@ -68,10 +63,10 @@ export default function FormDetail() {
         description: "Děkujeme za vaše podání.",
       });
     },
-    onError: () => {
+    onError: (err: { message?: string }) => {
       toast({
         title: "Chyba",
-        description: "Nepodařilo se odeslat formulář. Zkuste to prosím znovu.",
+        description: err?.message || "Nepodařilo se odeslat formulář. Zkuste to prosím znovu.",
         variant: "destructive",
       });
     },

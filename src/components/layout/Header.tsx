@@ -51,6 +51,10 @@ export function Header() {
             })}
           </nav>
 
+          <Link to="/prihlaseni" className="hidden md:inline-flex items-center px-4 py-2 rounded-lg text-sm font-medium text-muted-foreground hover:bg-secondary hover:text-foreground">
+            Přihlášení členů
+          </Link>
+
           {/* Mobile Menu Button */}
           <Button
             variant="ghost"

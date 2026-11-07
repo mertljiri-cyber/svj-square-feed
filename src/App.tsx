@@ -11,6 +11,10 @@ import IntentDetail from "./pages/IntentDetail";
 import Forms from "./pages/Forms";
 import FormDetail from "./pages/FormDetail";
 import NotFound from "./pages/NotFound";
+import Login from "./pages/Login";
+import Members from "./pages/Members";
+import { AuthProvider } from "./features/auth/AuthProvider";
+import { RequireMember } from "./features/auth/RequireMember";
 
 const queryClient = new QueryClient();
 
@@ -19,18 +23,22 @@ const App = () => (
     <TooltipProvider>
       <Toaster />
       <Sonner />
+      <AuthProvider>
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/novinky" element={<News />} />
           <Route path="/novinky/:id" element={<NewsDetail />} />
-          <Route path="/zamery" element={<Intents />} />
-          <Route path="/zamery/:id" element={<IntentDetail />} />
-          <Route path="/formulare" element={<Forms />} />
-          <Route path="/formulare/:id" element={<FormDetail />} />
+          <Route path="/prihlaseni" element={<Login />} />
+          <Route path="/clenove" element={<Members />} />
+          <Route path="/zamery" element={<RequireMember><Intents /></RequireMember>} />
+          <Route path="/zamery/:id" element={<RequireMember><IntentDetail /></RequireMember>} />
+          <Route path="/formulare" element={<RequireMember><Forms /></RequireMember>} />
+          <Route path="/formulare/:id" element={<RequireMember><FormDetail /></RequireMember>} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
+      </AuthProvider>
     </TooltipProvider>
   </QueryClientProvider>
 );

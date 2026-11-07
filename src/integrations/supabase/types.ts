@@ -46,6 +46,7 @@ export type Database = {
       forms: {
         Row: {
           active: boolean | null
+          organization_id: string
           created_at: string
           description: string | null
           fields: Json | null
@@ -177,7 +178,19 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      my_context: { Args: Record<string, never>; Returns: Json }
+      create_invitation: { Args: { p_organization_id: string; p_email: string; p_role?: string; p_valid_days?: number }; Returns: Json }
+      revoke_invitation: { Args: { p_invitation_id: string }; Returns: undefined }
+      accept_invitation: { Args: { p_token: string }; Returns: Json }
+      set_membership_status: { Args: { p_membership_id: string; p_status: string; p_expected_row_version: number }; Returns: number }
+      grant_role: { Args: { p_membership_id: string; p_role: string }; Returns: string }
+      revoke_role: { Args: { p_role_id: string }; Returns: undefined }
+      grant_scope: { Args: { p_membership_id: string; p_scope: string; p_permission: string }; Returns: string }
+      revoke_scope: { Args: { p_grant_id: string }; Returns: undefined }
+      list_members: { Args: { p_organization_id: string }; Returns: Json }
+      submit_intent: { Args: { p_organization_id: string; p_title: string; p_description: string; p_proposer_name: string | null }; Returns: string }
+      change_intent_status: { Args: { p_intent_id: string; p_status: string; p_expected_row_version: number }; Returns: number }
+      submit_form: { Args: { p_form_id: string; p_data: Json }; Returns: string }
     }
     Enums: {
       [_ in never]: never
