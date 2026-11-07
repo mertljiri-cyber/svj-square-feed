@@ -112,6 +112,7 @@ export default function Login() {
             </button>
             {message && <p role="status" className="text-sm">{message}</p>}
           </form>
+          </>
         )}
         <Link className="mt-8 inline-block text-sm text-muted-foreground underline" to="/">Zpět na úvod</Link>
       </div>
