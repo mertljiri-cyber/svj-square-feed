@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { Lightbulb, FileText, Newspaper } from "lucide-react";
+import { Lightbulb, FileText, Newspaper, Wrench } from "lucide-react";
 import { Layout } from "@/components/layout/Layout";
 import { NewsCard } from "@/components/news/NewsCard";
 import { DashboardTile } from "@/components/ui/DashboardTile";
@@ -51,7 +51,7 @@ export default function Index() {
 
       <div className="page-container">
         {/* Action Tiles */}
-        <section className="grid gap-4 md:grid-cols-3 mb-12">
+        <section className="grid gap-4 md:grid-cols-2 lg:grid-cols-4 mb-12">
           <DashboardTile
             title="Navrhnout záměr"
             description="Máte nápad na vylepšení domu?"
@@ -65,6 +65,12 @@ export default function Index() {
             href="/formulare"
             icon={FileText}
             variant="accent"
+          />
+          <DashboardTile
+            title="Technický přehled"
+            description="Společné části a technologie domu"
+            href="/technicky-prehled"
+            icon={Wrench}
           />
           <DashboardTile
             title="Všechny novinky"

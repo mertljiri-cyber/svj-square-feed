@@ -11,6 +11,7 @@ import IntentDetail from "./pages/IntentDetail";
 import Forms from "./pages/Forms";
 import FormDetail from "./pages/FormDetail";
 import NotFound from "./pages/NotFound";
+import TechnicalRegister from "./pages/TechnicalRegister";
 
 const queryClient = new QueryClient();
 
@@ -22,6 +23,7 @@ const App = () => (
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Index />} />
+          <Route path="/technicky-prehled" element={<TechnicalRegister />} />
           <Route path="/novinky" element={<News />} />
           <Route path="/novinky/:id" element={<NewsDetail />} />
           <Route path="/zamery" element={<Intents />} />
