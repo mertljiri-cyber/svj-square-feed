@@ -14,6 +14,50 @@ export type Database = {
   }
   public: {
     Tables: {
+      audit_events: {
+        Row: {
+          action: string
+          actor_user_id: string | null
+          details: Json
+          id: number
+          object_id: string | null
+          object_type: string
+          occurred_at: string
+          organization_id: string | null
+          tx_id: number
+        }
+        Insert: {
+          action: string
+          actor_user_id?: string | null
+          details?: Json
+          id?: never
+          object_id?: string | null
+          object_type: string
+          occurred_at?: string
+          organization_id?: string | null
+          tx_id?: number
+        }
+        Update: {
+          action?: string
+          actor_user_id?: string | null
+          details?: Json
+          id?: never
+          object_id?: string | null
+          object_type?: string
+          occurred_at?: string
+          organization_id?: string | null
+          tx_id?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "audit_events_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       form_submissions: {
         Row: {
           created_at: string
@@ -106,6 +150,166 @@ export type Database = {
         }
         Relationships: []
       }
+      invitations: {
+        Row: {
+          accepted_at: string | null
+          accepted_by: string | null
+          created_at: string
+          created_by: string | null
+          email: string
+          expires_at: string
+          id: string
+          organization_id: string
+          revoked_at: string | null
+          revoked_by: string | null
+          role: string
+          token_hash: string
+        }
+        Insert: {
+          accepted_at?: string | null
+          accepted_by?: string | null
+          created_at?: string
+          created_by?: string | null
+          email: string
+          expires_at: string
+          id?: string
+          organization_id: string
+          revoked_at?: string | null
+          revoked_by?: string | null
+          role?: string
+          token_hash: string
+        }
+        Update: {
+          accepted_at?: string | null
+          accepted_by?: string | null
+          created_at?: string
+          created_by?: string | null
+          email?: string
+          expires_at?: string
+          id?: string
+          organization_id?: string
+          revoked_at?: string | null
+          revoked_by?: string | null
+          role?: string
+          token_hash?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "invitations_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      membership_roles: {
+        Row: {
+          granted_at: string
+          granted_by: string | null
+          id: string
+          membership_id: string
+          organization_id: string
+          revoked_at: string | null
+          revoked_by: string | null
+          role: string
+          valid_from: string
+          valid_to: string | null
+        }
+        Insert: {
+          granted_at?: string
+          granted_by?: string | null
+          id?: string
+          membership_id: string
+          organization_id: string
+          revoked_at?: string | null
+          revoked_by?: string | null
+          role: string
+          valid_from?: string
+          valid_to?: string | null
+        }
+        Update: {
+          granted_at?: string
+          granted_by?: string | null
+          id?: string
+          membership_id?: string
+          organization_id?: string
+          revoked_at?: string | null
+          revoked_by?: string | null
+          role?: string
+          valid_from?: string
+          valid_to?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "membership_roles_organization_id_membership_id_fkey"
+            columns: ["organization_id", "membership_id"]
+            isOneToOne: false
+            referencedRelation: "memberships"
+            referencedColumns: ["organization_id", "id"]
+          },
+        ]
+      }
+      memberships: {
+        Row: {
+          approved_at: string | null
+          approved_by: string | null
+          created_at: string
+          id: string
+          invitation_id: string | null
+          organization_id: string
+          row_version: number
+          status: string
+          updated_at: string
+          user_id: string
+          valid_from: string
+          valid_to: string | null
+        }
+        Insert: {
+          approved_at?: string | null
+          approved_by?: string | null
+          created_at?: string
+          id?: string
+          invitation_id?: string | null
+          organization_id: string
+          row_version?: number
+          status?: string
+          updated_at?: string
+          user_id: string
+          valid_from?: string
+          valid_to?: string | null
+        }
+        Update: {
+          approved_at?: string | null
+          approved_by?: string | null
+          created_at?: string
+          id?: string
+          invitation_id?: string | null
+          organization_id?: string
+          row_version?: number
+          status?: string
+          updated_at?: string
+          user_id?: string
+          valid_from?: string
+          valid_to?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "memberships_invitation_fk"
+            columns: ["invitation_id"]
+            isOneToOne: false
+            referencedRelation: "invitations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "memberships_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       news: {
         Row: {
           author: string | null
@@ -151,6 +355,98 @@ export type Database = {
         }
         Relationships: []
       }
+      organizations: {
+        Row: {
+          created_at: string
+          id: string
+          name: string
+          timezone: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          name: string
+          timezone?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          name?: string
+          timezone?: string
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          created_at: string
+          display_name: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          display_name?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          display_name?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      scoped_grants: {
+        Row: {
+          granted_at: string
+          granted_by: string | null
+          id: string
+          membership_id: string
+          organization_id: string
+          permission: string
+          revoked_at: string | null
+          revoked_by: string | null
+          scope: string
+          valid_from: string
+          valid_to: string | null
+        }
+        Insert: {
+          granted_at?: string
+          granted_by?: string | null
+          id?: string
+          membership_id: string
+          organization_id: string
+          permission: string
+          revoked_at?: string | null
+          revoked_by?: string | null
+          scope: string
+          valid_from?: string
+          valid_to?: string | null
+        }
+        Update: {
+          granted_at?: string
+          granted_by?: string | null
+          id?: string
+          membership_id?: string
+          organization_id?: string
+          permission?: string
+          revoked_at?: string | null
+          revoked_by?: string | null
+          scope?: string
+          valid_from?: string
+          valid_to?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "scoped_grants_organization_id_membership_id_fkey"
+            columns: ["organization_id", "membership_id"]
+            isOneToOne: false
+            referencedRelation: "memberships"
+            referencedColumns: ["organization_id", "id"]
+          },
+        ]
+      }
       settings: {
         Row: {
           id: string
@@ -177,7 +473,54 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      accept_invitation: { Args: { p_token: string }; Returns: Json }
+      create_invitation: {
+        Args: {
+          p_email: string
+          p_organization_id: string
+          p_role?: string
+          p_valid_days?: number
+        }
+        Returns: Json
+      }
+      grant_role: {
+        Args: { p_membership_id: string; p_role: string }
+        Returns: string
+      }
+      grant_scope: {
+        Args: { p_membership_id: string; p_permission: string; p_scope: string }
+        Returns: string
+      }
+      list_members: {
+        Args: { p_organization_id: string }
+        Returns: {
+          approved_at: string
+          created_at: string
+          display_name: string
+          email: string
+          grants: Json
+          membership_id: string
+          roles: Json
+          row_version: number
+          status: string
+          user_id: string
+        }[]
+      }
+      my_context: { Args: never; Returns: Json }
+      revoke_invitation: {
+        Args: { p_invitation_id: string }
+        Returns: undefined
+      }
+      revoke_role: { Args: { p_role_id: string }; Returns: undefined }
+      revoke_scope: { Args: { p_grant_id: string }; Returns: undefined }
+      set_membership_status: {
+        Args: {
+          p_expected_row_version: number
+          p_membership_id: string
+          p_status: string
+        }
+        Returns: number
+      }
     }
     Enums: {
       [_ in never]: never

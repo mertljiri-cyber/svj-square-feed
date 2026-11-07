@@ -1,0 +1,13 @@
+{
+  "version": "7",
+  "dialect": "postgresql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "7",
+      "when": 1794090890377,
+      "tag": "0000_e0_identity_roles_audit",
+      "breakpoints": true
+    }
+  ]
+}
