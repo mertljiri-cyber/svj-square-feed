@@ -58,77 +58,6 @@ export type Database = {
           },
         ]
       }
-      document_grants: {
-        Row: {
-          id: string
-          organization_id: string
-          document_id: string
-          user_id: string
-          permission: string
-          granted_at: string
-          revoked_at: string | null
-        }
-        Insert: Record<string, never>
-        Update: Record<string, never>
-        Relationships: []
-      }
-      document_versions: {
-        Row: {
-          id: string
-          organization_id: string
-          document_id: string
-          version_no: number
-          object_key: string
-          original_filename: string
-          mime_type: string
-          bytes: number
-          sha256: string
-          upload_status: string
-          failure_reason: string | null
-          uploaded_by: string | null
-          created_at: string
-          ready_at: string | null
-        }
-        Insert: Record<string, never>
-        Update: Record<string, never>
-        Relationships: []
-      }
-      documents: {
-        Row: {
-          id: string
-          organization_id: string
-          title: string
-          category: string
-          period_from: string | null
-          period_to: string | null
-          visibility: string
-          lifecycle: string
-          current_version_id: string | null
-          created_at: string
-          updated_at: string
-          row_version: number
-        }
-        Insert: Record<string, never>
-        Update: Record<string, never>
-        Relationships: []
-      }
-      intent_events: {
-        Row: {
-          id: number
-          organization_id: string
-          intent_id: string
-          actor_user_id: string | null
-          event_type: string
-          from_status: string | null
-          to_status: string | null
-          note: string | null
-          details: Json
-          occurred_at: string
-        }
-        Insert: Record<string, never>
-        Update: Record<string, never>
-        Relationships: []
-      }
       form_submissions: {
         Row: {
           created_at: string
@@ -227,10 +156,6 @@ export type Database = {
           created_at: string
           created_by: string | null
           description: string | null
-          decision_note: string | null
-          estimated_cost: number | null
-          location: string | null
-          planned_year: number | null
           id: string
           organization_id: string
           priority: string
@@ -245,10 +170,6 @@ export type Database = {
           created_at?: string
           created_by?: string | null
           description?: string | null
-          decision_note?: string | null
-          estimated_cost?: number | null
-          location?: string | null
-          planned_year?: number | null
           id?: string
           organization_id: string
           priority?: string
@@ -263,10 +184,6 @@ export type Database = {
           created_at?: string
           created_by?: string | null
           description?: string | null
-          decision_note?: string | null
-          estimated_cost?: number | null
-          location?: string | null
-          planned_year?: number | null
           id?: string
           organization_id?: string
           priority?: string
@@ -880,18 +797,6 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      create_document: { Args: { p_organization_id: string; p_title: string; p_category: string; p_period_from: string | null; p_period_to: string | null; p_visibility: string }; Returns: string }
-      update_document: { Args: { p_document_id: string; p_title: string; p_category: string; p_period_from: string | null; p_period_to: string | null; p_visibility: string; p_expected_row_version: number }; Returns: number }
-      begin_upload: { Args: { p_document_id: string; p_filename: string; p_mime: string; p_bytes: number; p_sha256: string }; Returns: Json }
-      complete_upload: { Args: { p_version_id: string }; Returns: Json }
-      publish_version: { Args: { p_document_id: string; p_version_id: string; p_expected_row_version: number }; Returns: number }
-      set_document_lifecycle: { Args: { p_document_id: string; p_to: string; p_expected_row_version: number }; Returns: number }
-      grant_document_access: { Args: { p_document_id: string; p_user_id: string; p_permission: string }; Returns: string }
-      revoke_document_access: { Args: { p_grant_id: string }; Returns: undefined }
-      authorize_download: { Args: { p_version_id: string }; Returns: Json }
-      update_intent: { Args: { p_intent_id: string; p_title: string; p_description: string | null; p_priority: string; p_location: string | null; p_estimated_cost: number | null; p_planned_year: number | null; p_expected_row_version: number }; Returns: number }
-      add_intent_comment: { Args: { p_intent_id: string; p_body: string }; Returns: number }
-      intent_people: { Args: { p_intent_id: string }; Returns: { user_id: string; display_name: string | null }[] }
       accept_invitation: { Args: { p_token: string }; Returns: Json }
       add_request_comment: {
         Args: { p_body: string; p_internal?: boolean; p_request_id: string }
@@ -899,7 +804,6 @@ export type Database = {
       }
       change_intent_status: {
         Args: {
-          p_decision_note?: string | null
           p_expected_row_version: number
           p_intent_id: string
           p_status: string
