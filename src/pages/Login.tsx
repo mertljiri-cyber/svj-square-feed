@@ -86,6 +86,7 @@ export default function Login() {
         {session ? (
           <p className="text-sm">Přihlášen. {message}</p>
         ) : (
+          <>
           <div className="space-y-4">
             <button
               type="button"
