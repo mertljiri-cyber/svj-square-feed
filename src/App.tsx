@@ -15,6 +15,9 @@ import TechnicalRegister from "./pages/TechnicalRegister";
 import TechnicalAssetDetail from "./pages/TechnicalAssetDetail";
 import RepairPlan from "./pages/RepairPlan";
 import VerificationOverview from "./pages/VerificationOverview";
+import Admin from "./pages/Admin";
+import AdminAudit from "./pages/AdminAudit";
+import AdminNews from "./pages/AdminNews";
 import Documents from "./pages/Documents";
 import DocumentDetail from "./pages/DocumentDetail";
 import Requests from "./pages/Requests";
@@ -49,6 +52,9 @@ const App = () => (
           <Route path="/novinky/:id" element={<NewsDetail />} />
           <Route path="/prihlaseni" element={<Login />} />
           <Route path="/clenove" element={<Members />} />
+          <Route path="/sprava" element={<Admin />} />
+          <Route path="/sprava/audit" element={<AdminAudit />} />
+          <Route path="/sprava/novinky" element={<AdminNews />} />
           <Route path="/zamery" element={<RequireMember><Intents /></RequireMember>} />
           <Route path="/zamery/:id" element={<RequireMember><IntentDetail /></RequireMember>} />
           <Route path="/formulare" element={<RequireMember><Forms /></RequireMember>} />
