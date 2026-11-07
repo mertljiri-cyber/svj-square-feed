@@ -86,6 +86,22 @@ export default function Login() {
         {session ? (
           <p className="text-sm">Přihlášen. {message}</p>
         ) : (
+          <div className="space-y-4">
+            <button
+              type="button"
+              onClick={signInWithGoogle}
+              disabled={busy}
+              className="flex w-full items-center justify-center gap-2.5 rounded-lg border border-[#747775] bg-white px-3 py-2.5 text-sm font-medium text-[#1F1F1F] transition-colors hover:bg-[#F2F2F2] disabled:opacity-50"
+            >
+              <GoogleLogo />
+              Pokračovat přes Google
+            </button>
+            <div className="flex items-center gap-3 text-xs text-muted-foreground">
+              <span className="h-px flex-1 bg-border" />
+              nebo e-mailem
+              <span className="h-px flex-1 bg-border" />
+            </div>
+          </div>
           <form onSubmit={submit} className="space-y-4">
             <label className="block text-sm font-medium">E-mail<Input className="mt-1" type="email" autoComplete="email" required value={email} onChange={(e) => setEmail(e.target.value)} /></label>
             <label className="block text-sm font-medium">Heslo<Input className="mt-1" type="password" minLength={10} autoComplete={mode === "in" ? "current-password" : "new-password"} required value={password} onChange={(e) => setPassword(e.target.value)} /></label>
