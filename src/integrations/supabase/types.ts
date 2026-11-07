@@ -128,6 +128,23 @@ export type Database = {
         }
         Relationships: []
       }
+      intent_events: {
+        Row: {
+          id: number
+          organization_id: string
+          intent_id: string
+          actor_user_id: string | null
+          event_type: string
+          from_status: string | null
+          to_status: string | null
+          note: string | null
+          details: Json
+          occurred_at: string
+        }
+        Insert: Record<string, never>
+        Update: Record<string, never>
+        Relationships: []
+      }
       intents: {
         Row: {
           created_at: string
@@ -138,6 +155,13 @@ export type Database = {
           status: string | null
           title: string
           updated_at: string
+          organization_id: string
+          created_by: string | null
+          row_version: number
+          location: string | null
+          estimated_cost: number | null
+          planned_year: number | null
+          decision_note: string | null
         }
         Insert: {
           created_at?: string
@@ -287,7 +311,7 @@ export type Database = {
       revoke_scope: { Args: { p_grant_id: string }; Returns: undefined }
       list_members: { Args: { p_organization_id: string }; Returns: Json }
       submit_intent: { Args: { p_organization_id: string; p_title: string; p_description: string; p_proposer_name: string | null }; Returns: string }
-      change_intent_status: { Args: { p_intent_id: string; p_status: string; p_expected_row_version: number }; Returns: number }
+      change_intent_status: { Args: { p_intent_id: string; p_status: string; p_expected_row_version: number; p_decision_note?: string | null }; Returns: number }
       create_request: { Args: { p_organization_id: string; p_type: string; p_title: string; p_description: string; p_location?: string | null; p_asset_ref?: string | null; p_idempotency_key?: string | null }; Returns: Json }
       add_request_comment: { Args: { p_request_id: string; p_body: string; p_internal?: boolean }; Returns: number }
       request_reopen: { Args: { p_request_id: string; p_reason: string; p_expected_row_version: number }; Returns: number }
@@ -302,6 +326,9 @@ export type Database = {
       grant_document_access: { Args: { p_document_id: string; p_user_id: string; p_permission: string }; Returns: string }
       revoke_document_access: { Args: { p_grant_id: string }; Returns: undefined }
       authorize_download: { Args: { p_version_id: string }; Returns: Json }
+      update_intent: { Args: { p_intent_id: string; p_title: string; p_description: string | null; p_priority: string; p_location: string | null; p_estimated_cost: number | null; p_planned_year: number | null; p_expected_row_version: number }; Returns: number }
+      add_intent_comment: { Args: { p_intent_id: string; p_body: string }; Returns: number }
+      intent_people: { Args: { p_intent_id: string }; Returns: { user_id: string; display_name: string | null }[] }
       submit_form: { Args: { p_form_id: string; p_data: Json }; Returns: string }
     }
     Enums: {

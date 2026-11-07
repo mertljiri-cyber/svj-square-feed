@@ -1,5 +1,9 @@
 import { useState, useMemo } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { useAuth } from "@/features/auth/AuthProvider";
 import { Layout } from "@/components/layout/Layout";
 import { IntentCard } from "@/components/intents/IntentCard";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -31,6 +35,23 @@ const priorityOptions = [
 export default function Intents() {
   const [statusFilter, setStatusFilter] = useState("all");
   const [priorityFilter, setPriorityFilter] = useState("all");
+  const { activeMembership } = useAuth();
+  const qc = useQueryClient();
+  const [creating, setCreating] = useState(false);
+  const [form, setForm] = useState({ title: "", description: "" });
+  const [message, setMessage] = useState("");
+
+  async function create(e: React.FormEvent) {
+    e.preventDefault();
+    const { error } = await supabase.rpc("submit_intent", {
+      p_organization_id: activeMembership!.organization_id, p_title: form.title, p_description: form.description, p_proposer_name: null,
+    });
+    if (error) { setMessage(error.message); return; }
+    setMessage("Záměr byl podán jako návrh.");
+    setCreating(false);
+    setForm({ title: "", description: "" });
+    await qc.invalidateQueries({ queryKey: ["intents"] });
+  }
 
   const { data: intents, isLoading } = useQuery({
     queryKey: ["intents"],
@@ -56,12 +77,27 @@ export default function Intents() {
   return (
     <Layout>
       <div className="page-container">
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-foreground mb-2">Záměry</h1>
-          <p className="text-muted-foreground">
-            Přehled návrhů na opravy, změny a investice v domě
-          </p>
+        <div className="mb-8 flex flex-wrap items-start justify-between gap-4">
+          <div>
+            <h1 className="text-3xl font-bold text-foreground mb-2">Záměry</h1>
+            <p className="text-muted-foreground">
+              Přehled návrhů na opravy, změny a investice v domě
+            </p>
+          </div>
+          <Button onClick={() => { setCreating(true); setMessage(""); }}>Nový záměr</Button>
         </div>
+
+        {message && <p role="status" className="mb-6 rounded-lg border p-3 text-sm">{message}</p>}
+
+        {creating && (
+          <form onSubmit={create} className="mb-8 space-y-4 rounded-xl border bg-card p-6">
+            <h2 className="text-lg font-semibold">Nový záměr</h2>
+            <label className="block text-sm font-medium">Název *<Input className="mt-1" required minLength={3} maxLength={200} value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} /></label>
+            <label className="block text-sm font-medium">Popis<Textarea className="mt-1 min-h-32" maxLength={5000} value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} /></label>
+            <p className="text-xs text-muted-foreground">Záměr je návrh. Prioritu, odhad nákladů a rok doplní správce a schválit ho může jen výbor.</p>
+            <div className="flex gap-3"><Button type="submit">Podat záměr</Button><Button type="button" variant="outline" onClick={() => setCreating(false)}>Zrušit</Button></div>
+          </form>
+        )}
 
         {/* Filters */}
         <div className="flex flex-wrap gap-4 mb-8">
