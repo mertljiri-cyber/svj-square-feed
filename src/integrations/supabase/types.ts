@@ -317,13 +317,64 @@ export type Database = {
           },
         ]
       }
+      intent_events: {
+        Row: {
+          actor_user_id: string | null
+          details: Json
+          event_type: string
+          from_status: string | null
+          id: number
+          intent_id: string
+          note: string | null
+          occurred_at: string
+          organization_id: string
+          to_status: string | null
+        }
+        Insert: {
+          actor_user_id?: string | null
+          details?: Json
+          event_type: string
+          from_status?: string | null
+          id?: never
+          intent_id: string
+          note?: string | null
+          occurred_at?: string
+          organization_id: string
+          to_status?: string | null
+        }
+        Update: {
+          actor_user_id?: string | null
+          details?: Json
+          event_type?: string
+          from_status?: string | null
+          id?: never
+          intent_id?: string
+          note?: string | null
+          occurred_at?: string
+          organization_id?: string
+          to_status?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "intent_events_organization_id_intent_id_fkey"
+            columns: ["organization_id", "intent_id"]
+            isOneToOne: false
+            referencedRelation: "intents"
+            referencedColumns: ["organization_id", "id"]
+          },
+        ]
+      }
       intents: {
         Row: {
           created_at: string
           created_by: string | null
+          decision_note: string | null
           description: string | null
+          estimated_cost: number | null
           id: string
+          location: string | null
           organization_id: string
+          planned_year: number | null
           priority: string
           proposer_name: string | null
           row_version: number
@@ -335,9 +386,13 @@ export type Database = {
         Insert: {
           created_at?: string
           created_by?: string | null
+          decision_note?: string | null
           description?: string | null
+          estimated_cost?: number | null
           id?: string
+          location?: string | null
           organization_id: string
+          planned_year?: number | null
           priority?: string
           proposer_name?: string | null
           row_version?: number
@@ -349,9 +404,13 @@ export type Database = {
         Update: {
           created_at?: string
           created_by?: string | null
+          decision_note?: string | null
           description?: string | null
+          estimated_cost?: number | null
           id?: string
+          location?: string | null
           organization_id?: string
+          planned_year?: number | null
           priority?: string
           proposer_name?: string | null
           row_version?: number
@@ -964,6 +1023,10 @@ export type Database = {
     }
     Functions: {
       accept_invitation: { Args: { p_token: string }; Returns: Json }
+      add_intent_comment: {
+        Args: { p_body: string; p_intent_id: string }
+        Returns: number
+      }
       add_request_comment: {
         Args: { p_body: string; p_internal?: boolean; p_request_id: string }
         Returns: number
@@ -981,6 +1044,7 @@ export type Database = {
       }
       change_intent_status: {
         Args: {
+          p_decision_note?: string
           p_expected_row_version: number
           p_intent_id: string
           p_status: string
@@ -1045,6 +1109,13 @@ export type Database = {
       grant_scope: {
         Args: { p_membership_id: string; p_permission: string; p_scope: string }
         Returns: string
+      }
+      intent_people: {
+        Args: { p_intent_id: string }
+        Returns: {
+          display_name: string
+          user_id: string
+        }[]
       }
       list_members: {
         Args: { p_organization_id: string }
@@ -1133,6 +1204,19 @@ export type Database = {
           p_period_to: string
           p_title: string
           p_visibility: string
+        }
+        Returns: number
+      }
+      update_intent: {
+        Args: {
+          p_description: string
+          p_estimated_cost: number
+          p_expected_row_version: number
+          p_intent_id: string
+          p_location: string
+          p_planned_year: number
+          p_priority: string
+          p_title: string
         }
         Returns: number
       }
