@@ -8,6 +8,20 @@ Asistent odpovídá na otázky nad publikovanými dokumenty, ke kterým má uži
 
 Soukromé přímé zprávy, nepublikované uploady, raw importy a individuální osobní podklady jsou z první verze vyloučeny. Pozdější zpřístupnění restricted dokumentů vyžaduje zvláštní testy a souhlas správce obsahu s tímto způsobem zpracování.
 
+## SVJ LLM Wiki jako zdroj pro asistenta
+
+Pilotní funkce „Zeptat se na dům“ poběží přímo v portálu, jen pro čtení. Živá wiki zůstane pracovní znalostní bází; portál nebude číst celý vault. Importuje jen výslovně schválené úryvky s identifikátorem poznámky, revizí/otiskem exportu a datem. První zdroje: časová osa usnesení, stanovy a plán oprav. Soukromá pošta, individuální podklady a surový archiv do pilotu nepatří.
+
+Wiki pomáhá najít souvislosti, ale rozhodnutí nebo stav realizace dokládá originál. Každý úryvek musí odkazovat na konkrétní verzi dokumentu a stránku nebo oddíl v portálovém archivu. V první verzi má úryvek jeden povinný zdroj; pokud jeho text vychází z více dokumentů, musí autorizace projít u všech, jinak se úryvek nezařadí. Interní odkazy na disk ani nepropojené záznamy neslouží jako citace. Oprávnění se ověří před předáním modelu i před zobrazením citací; stažení publikace musí fungovat bez čekání na nový export wiki.
+
+UAT: „Co se schválilo ohledně zvonků?“ musí odlišit plánovanou položku od doloženého usnesení a skutečného provedení. Dotaz na chybějící podklad musí přiznat, že to nelze doložit. Uživatel bez přístupu nesmí dostat ani úryvek, ani název skrytého zdroje. Technické ověření proběhne nejdřív se syntetickými dokumenty. Model ani místo zpracování reálných dat tímto zadáním nejsou schválené.
+
+### Implementační stav – výběr zdrojů
+
+Migrace `20261119123000_wiki_sources.sql` přidává čtecí RPC `search_wiki_sources` nad evidencí schválených výňatků. Pro běžné uživatele neexistuje zápis ani přímý přístup do wiki. Čtení vyžaduje aktuální publikovanou PDF verzi s publikem „Vlastníci a výbor“ a současně platná práva k dokumentu. Integrační test `wiki-sources.test.ts` používá syntetické záznamy a ověřuje oddělení organizací, schválení výňatku, odvolání členství, nahrazení verze a stažení dokumentu.
+
+Jde o první databázovou část, nikoli živé AI. Před reálnými daty ještě chybí kontrolovaný import včetně ověření skutečného čísla stránky a schvalovatele, ověření přes nasazené API a napojení modelu s opětovnou kontrolou oprávnění před odpovědí.
+
 ## Zpracování zdroje
 
 1. Triggerem je připravená a schválená verze dokumentu, ne libovolný soubor v bucketu.
