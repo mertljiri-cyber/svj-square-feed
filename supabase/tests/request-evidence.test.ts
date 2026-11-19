@@ -36,7 +36,14 @@ it('links an exact ready archive version without expanding request or archive ac
     await expectDbError(w.db.rpc(w.ownerA,'public.authorize_download($1)',[privateDoc.version_id]),'PT404');
     expect(await w.db.q(w.ownerA,'select name from storage.objects where name=$1',[privateDoc.object_key])).toEqual([]);
     await expectDbError(w.db.q(w.boardA,'delete from public.request_evidence where request_id=$1',[id]),'42501');
-    const [{row_version}] = await w.db.admin<{row_version: number}>('select row_version from public.documents where id=$1',[shared.doc]);
+    const v2 = await w.db.rpc<{version_id: string; object_key: string}>(w.boardA, "public.begin_upload($1,'test-v2.pdf','application/pdf',10,$2)", [shared.doc, 'b'.repeat(64)]);
+    await w.db.q(w.boardA, "insert into storage.objects (bucket_id,name,owner,metadata) values ('documents',$1,auth.uid(),$2)", [v2.object_key, JSON.stringify({size:10,mimetype:'application/pdf'})]);
+    await w.db.rpc(w.boardA, 'public.complete_upload($1)', [v2.version_id]);
+    const [{row_version: beforePublish}] = await w.db.admin<{row_version: number}>('select row_version from public.documents where id=$1', [shared.doc]);
+    await w.db.rpc(w.boardA, 'public.publish_version($1,$2,$3)', [shared.doc,v2.version_id,beforePublish]);
+    expect(await list(w.ownerA)).toEqual([{version_id:shared.version_id}]);
+    expect(await w.db.rpc(w.ownerA,'public.authorize_download($1)',[shared.version_id])).toMatchObject({object_key:shared.object_key});
+    const [{row_version}] = await w.db.admin<{row_version: number}>('select row_version from public.documents where id=$1', [shared.doc]);
     await w.db.rpc(w.boardA,"public.set_document_lifecycle($1,'withdrawn',$2)",[shared.doc,row_version]);
     expect(await list(w.ownerA)).toEqual([]);
     await expectDbError(w.db.rpc(w.ownerA,'public.authorize_download($1)',[shared.version_id]),'PT404');
