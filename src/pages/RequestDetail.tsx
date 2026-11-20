@@ -1,3 +1,5 @@
+import { RequestEvidence } from "@/features/requests/RequestEvidence";
+import assets from "@/data/technical-register.json";
 import { useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
@@ -75,6 +77,7 @@ function RequestDetailInner() {
     return <Layout><div className="page-container py-12"><h1 className="text-2xl font-bold">Požadavek nenalezen</h1><Link className="mt-4 inline-block text-primary underline" to="/pozadavky">Zpět na požadavky</Link></div></Layout>;
   }
 
+  const asset = assets.find(item => item.id === request.asset_ref);
   const isAuthor = request.author_user_id === userId;
   const isAssignee = request.assignee_user_id === userId;
   const handler = isBoard || isAssignee;
@@ -113,7 +116,7 @@ function RequestDetailInner() {
               <p className="whitespace-pre-wrap text-sm">{request.description}</p>
               <dl className="mt-5 grid gap-3 text-sm sm:grid-cols-2">
                 <div><dt className="text-muted-foreground">Místo</dt><dd>{request.location || "Nedoplněno"}</dd></div>
-                <div><dt className="text-muted-foreground">Technický prvek</dt><dd>{request.asset_ref || "Bez vazby"}</dd></div>
+                <div><dt className="text-muted-foreground">Technický prvek</dt><dd>{asset ? <Link className="text-primary underline" to={`/technicky-prehled/${asset.id}`}>{asset.id} · {asset.name}</Link> : request.asset_ref || "Bez vazby"}</dd></div>
                 <div><dt className="text-muted-foreground">Řešitel</dt><dd>{request.assignee_user_id ? (assigneeName?.display_name || assigneeName?.email || (isAssignee ? "Vy" : "Přidělen")) : "Nepřidělen"}</dd></div>
                 <div><dt className="text-muted-foreground">Termín</dt><dd>{request.due_on ? new Date(request.due_on).toLocaleDateString("cs-CZ") : "Neurčen"}</dd></div>
                 {isBoard && <div><dt className="text-muted-foreground">Priorita (interní)</dt><dd>{request.triage_priority ? priorityLabels[request.triage_priority] : "Neurčena"}</dd></div>}
@@ -121,6 +124,7 @@ function RequestDetailInner() {
               {request.resolution_text && <div className="mt-5 rounded-lg border border-primary/30 p-4 text-sm"><p className="font-medium">Výsledek řešení</p><p className="mt-1 whitespace-pre-wrap">{request.resolution_text}</p></div>}
             </section>
 
+            <RequestEvidence key={`${userId}:${request.id}`} requestId={request.id} organizationId={request.organization_id} userId={userId} canAttach={handler} />
             <section className="rounded-xl border bg-card p-6">
               <h2 className="mb-4 text-lg font-semibold">Historie</h2>
               <ol className="space-y-4">

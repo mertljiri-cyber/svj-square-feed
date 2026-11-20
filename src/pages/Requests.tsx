@@ -1,3 +1,4 @@
+import assets from "@/data/technical-register.json";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
@@ -80,7 +81,7 @@ function RequestsInner() {
             <label className="block text-sm font-medium">Popis *<Textarea className="mt-1" required minLength={3} maxLength={5000} value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} /></label>
             <div className="grid gap-4 sm:grid-cols-2">
               <label className="text-sm font-medium">Místo<Input className="mt-1" maxLength={120} value={form.location} onChange={(e) => setForm({ ...form, location: e.target.value })} /></label>
-              <label className="text-sm font-medium">Označení technického prvku (např. T-013)<Input className="mt-1" pattern="[A-Za-z]{1,3}-[0-9]{3}" value={form.asset_ref} onChange={(e) => setForm({ ...form, asset_ref: e.target.value })} /></label>
+              <label className="text-sm font-medium">Technický prvek (nepovinný)<Input className="mt-1" list="svj-assets" pattern="[A-Za-z]{1,3}-[0-9]{3}" value={form.asset_ref} onChange={(e) => setForm({ ...form, asset_ref: e.target.value })} /><datalist id="svj-assets">{assets.map(asset => <option key={asset.id} value={asset.id} label={asset.name} />)}</datalist></label>
             </div>
             <p className="text-xs text-muted-foreground">Přílohy zatím nejsou dostupné. Neuvádějte hesla ani citlivé osobní údaje.</p>
             <div className="flex gap-3">
