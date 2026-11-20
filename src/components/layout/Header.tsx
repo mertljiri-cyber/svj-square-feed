@@ -21,7 +21,7 @@ export function Header() {
   const { session, isBoard, activeMembership, signOut } = useAuth();
   // Sekce Správa je viditelná jen výboru; přístup stejně vynucuje server.
   const items = [...navigation,
-    ...(activeMembership && import.meta.env.VITE_SVJ_ASK_ENABLED === "true" ? [{name:"Zeptat se",href:"/zeptat-se",icon:Lightbulb}] : []),
+    ...(activeMembership && import.meta.env.VITE_SVJ_ASK_ENABLED !== "false" ? [{name:"Zeptat se",href:"/zeptat-se",icon:Lightbulb}] : []),
     ...(isBoard ? [{ name: "Správa", href: "/sprava", icon: Settings }] : []),
   ];
 

@@ -43,7 +43,7 @@ const App = () => (
           <Route path="/technicky-prehled" element={<TechnicalRegister />} />
           <Route path="/technicky-prehled/:id" element={<TechnicalAssetDetail />} />
           <Route path="/plan-oprav" element={<RepairPlan />} />
-          {import.meta.env.VITE_SVJ_ASK_ENABLED === "true" && <Route path="/zeptat-se" element={<AskHouse />} />}
+          {import.meta.env.VITE_SVJ_ASK_ENABLED !== "false" && <Route path="/zeptat-se" element={<AskHouse />} />}
           <Route path="/dokumenty" element={<Documents />} />
           <Route path="/dokumenty/:id" element={<DocumentDetail />} />
           <Route path="/pozadavky" element={<Requests />} />
