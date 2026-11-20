@@ -795,12 +795,6 @@ export type Database = {
           },
         ]
       }
-      request_evidence: {
-        Row: { request_id: string; organization_id: string; document_id: string; version_id: string; linked_at: string }
-        Insert: never
-        Update: never
-        Relationships: []
-      }
       request_events: {
         Row: {
           actor_user_id: string | null
@@ -1037,7 +1031,6 @@ export type Database = {
         Args: { p_body: string; p_internal?: boolean; p_request_id: string }
         Returns: number
       }
-      attach_request_evidence: { Args: { p_request_id: string; p_version_id: string }; Returns: undefined }
       authorize_download: { Args: { p_version_id: string }; Returns: Json }
       begin_upload: {
         Args: {
