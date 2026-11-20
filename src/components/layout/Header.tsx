@@ -18,9 +18,12 @@ const navigation = [
 export function Header() {
   const location = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const { session, isBoard, signOut } = useAuth();
+  const { session, isBoard, activeMembership, signOut } = useAuth();
   // Sekce Správa je viditelná jen výboru; přístup stejně vynucuje server.
-  const items = isBoard ? [...navigation, { name: "Správa", href: "/sprava", icon: Settings }] : navigation;
+  const items = [...navigation,
+    ...(activeMembership && import.meta.env.VITE_SVJ_ASK_ENABLED === "true" ? [{name:"Zeptat se",href:"/zeptat-se",icon:Lightbulb}] : []),
+    ...(isBoard ? [{ name: "Správa", href: "/sprava", icon: Settings }] : []),
+  ];
 
   return (
     <header className="sticky top-0 z-50 border-b border-border bg-card/95 backdrop-blur supports-[backdrop-filter]:bg-card/80">
