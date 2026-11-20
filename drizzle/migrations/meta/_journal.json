@@ -57,6 +57,13 @@
       "when": 1795190054275,
       "tag": "0007_ask_house_quota",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1795193621100,
+      "tag": "0008_house_markdown_chat",
+      "breakpoints": true
     }
   ]
 }

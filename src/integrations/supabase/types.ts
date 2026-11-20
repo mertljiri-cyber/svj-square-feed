@@ -1270,6 +1270,15 @@ export type Database = {
         }[]
       }
       my_context: { Args: never; Returns: Json }
+      publish_house_markdown: {
+        Args: {
+          p_key: string
+          p_markdown: string
+          p_org: string
+          p_title: string
+        }
+        Returns: string
+      }
       publish_version: {
         Args: {
           p_document_id: string
@@ -1277,6 +1286,10 @@ export type Database = {
           p_version_id: string
         }
         Returns: number
+      }
+      read_house_markdown: {
+        Args: { p_ids?: string[]; p_org: string; p_terms: string[] }
+        Returns: Json
       }
       request_people: {
         Args: { p_request_ids: string[] }
@@ -1364,6 +1377,10 @@ export type Database = {
           p_title: string
         }
         Returns: number
+      }
+      withdraw_house_markdown: {
+        Args: { p_key: string; p_org: string }
+        Returns: undefined
       }
     }
     Enums: {
