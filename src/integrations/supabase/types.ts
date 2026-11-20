@@ -1114,6 +1114,38 @@ export type Database = {
           },
         ]
       }
+      wiki_markdown_revisions: {
+        Row: {
+          content_sha256: string
+          imported_at: string
+          note_key: string
+          object_key: string | null
+          organization_id: string
+        }
+        Insert: {
+          content_sha256: string
+          imported_at?: string
+          note_key: string
+          object_key?: string | null
+          organization_id: string
+        }
+        Update: {
+          content_sha256?: string
+          imported_at?: string
+          note_key?: string
+          object_key?: string | null
+          organization_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "wiki_markdown_revisions_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
@@ -1167,6 +1199,10 @@ export type Database = {
         Returns: number
       }
       complete_upload: { Args: { p_version_id: string }; Returns: Json }
+      consume_house_question: {
+        Args: { p_organization_id: string }
+        Returns: undefined
+      }
       create_document: {
         Args: {
           p_category: string
@@ -1267,6 +1303,10 @@ export type Database = {
       }
       revoke_role: { Args: { p_role_id: string }; Returns: undefined }
       revoke_scope: { Args: { p_grant_id: string }; Returns: undefined }
+      search_house_terms: {
+        Args: { p_organization_id: string; p_terms: string[] }
+        Returns: Json
+      }
       search_wiki_sources: {
         Args: { p_limit?: number; p_organization_id: string; p_query: string }
         Returns: Json

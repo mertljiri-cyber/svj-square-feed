@@ -50,6 +50,13 @@
       "when": 1795187484639,
       "tag": "0006_wiki_sources",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1795190054275,
+      "tag": "0007_ask_house_quota",
+      "breakpoints": true
     }
   ]
 }
