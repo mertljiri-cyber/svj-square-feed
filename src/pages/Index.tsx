@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { Lightbulb, FileText, Newspaper, Wrench } from "lucide-react";
+import { Link } from 'react-router-dom';
 import { Layout } from "@/components/layout/Layout";
 import { NewsCard } from "@/components/news/NewsCard";
 import { DashboardTile } from "@/components/ui/DashboardTile";
@@ -46,6 +47,10 @@ export default function Index() {
           <p className="text-lg text-muted-foreground max-w-2xl">
             {settings || "Vítejte na informačním portálu Společenství vlastníků jednotek."}
           </p>
+          <div className="mt-6 flex flex-col gap-3 sm:flex-row">
+            {import.meta.env.VITE_SVJ_ASK_ENABLED !== 'false' && <Link className="rounded-lg bg-primary px-5 py-3 text-center font-medium text-primary-foreground" to="/zeptat-se">Zeptat se na dům</Link>}
+            <Link className="rounded-lg border bg-card px-5 py-3 text-center font-medium" to="/technicky-prehled">Prohlédnout technický přehled</Link>
+          </div>
         </div>
       </section>
 

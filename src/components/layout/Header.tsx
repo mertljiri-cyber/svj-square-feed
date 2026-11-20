@@ -27,10 +27,10 @@ export function Header() {
 
   return (
     <header className="sticky top-0 z-50 border-b border-border bg-card/95 backdrop-blur supports-[backdrop-filter]:bg-card/80">
-      <div className="mx-auto max-w-6xl px-4">
+      <div className="mx-auto max-w-7xl px-4">
         <div className="flex h-16 items-center justify-between">
           {/* Logo */}
-          <Link to="/" className="flex items-center gap-3">
+          <Link to="/" className="flex shrink-0 items-center gap-3">
             <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary">
               <Building2 className="h-5 w-5 text-primary-foreground" />
             </div>
@@ -41,7 +41,7 @@ export function Header() {
           </Link>
 
           {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center gap-1">
+          <nav className="hidden 2xl:flex items-center gap-1">
             {items.map((item) => {
               const isActive = location.pathname === item.href || 
                 (item.href !== "/" && location.pathname.startsWith(item.href));
@@ -49,7 +49,7 @@ export function Header() {
                 <Link
                   key={item.name}
                   to={item.href}
-                  className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+                  className={`flex items-center gap-1 px-2 py-2 rounded-lg text-sm font-medium transition-colors ${
                     isActive
                       ? "bg-primary text-primary-foreground"
                       : "text-muted-foreground hover:bg-secondary hover:text-foreground"
@@ -76,7 +76,10 @@ export function Header() {
           <Button
             variant="ghost"
             size="icon"
-            className="md:hidden"
+            className="2xl:hidden"
+            aria-label="Navigace"
+            aria-expanded={mobileMenuOpen}
+            aria-controls="mobile-navigation"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
           >
             {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
@@ -85,7 +88,7 @@ export function Header() {
 
         {/* Mobile Navigation */}
         {mobileMenuOpen && (
-          <nav className="md:hidden py-4 border-t border-border">
+          <nav id="mobile-navigation" className="2xl:hidden py-4 border-t border-border">
             <div className="flex flex-col gap-1">
               {items.map((item) => {
                 const isActive = location.pathname === item.href || 
