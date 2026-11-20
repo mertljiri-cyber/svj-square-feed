@@ -24,6 +24,10 @@ it('retrieves only approved excerpts backed by the current readable PDF in this 
     expect(authorized).toHaveLength(1);
     expect(authorized[0]).toMatchObject({document_id:shared.doc,version_id:shared.v,page:3});
     expect(await search(w.boardA)).toHaveLength(1);
+    const prefixes = (actor: string) => db.rpc(actor,'public.search_house_terms($1,$2)',[w.orgA,['zvonk']]);
+    expect(await prefixes(w.ownerA)).toMatchObject([{document_id:shared.doc,version_id:shared.v,page:3}]);
+    expect(await prefixes(w.boardA)).toHaveLength(1);
+    expect(await prefixes(w.ownerB)).toEqual([]);
     expect(await search(w.ownerA,w.orgB)).toEqual([]);
     expect(await search(w.ownerA,w.orgA,'střecha')).toEqual([]);
     expect(await search(w.pendingA)).toEqual([]);
