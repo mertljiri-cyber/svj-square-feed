@@ -1,4 +1,4 @@
-export type Source = { id: string; document_id: string; version_id: string; page: number; body: string; title: string };
+export type Source = { id: string; note_key: string; revision: string; section: string; body: string; title: string };
 type Claim = { text: string; citations: number[] };
 const UNKNOWN = { kind: 'unknown' } as const;
 const STOP = new Set(['co','se','jak','jaky','jaka','je','jsou','bylo','byla','kdy','kde','kdo','o','v','ve','na','za','a','ohledne','ohlednem','schvalilo','schvalili','vime','stav','jaky','prosím']);
@@ -20,6 +20,6 @@ export async function answerQuestion(question: string, deps: {search: (question:
     claims.push({text:c.text.trim(),citations:[...new Set<number>(c.citations)]});
   }
   const visible = new Map((await deps.recheck(sources.map(s=>s.id))).map(s=>[s.id,s]));
-  if (sources.some(s=>{const current=visible.get(s.id);return !current || current.body!==s.body || current.version_id!==s.version_id || current.document_id!==s.document_id || current.page!==s.page || current.title!==s.title;})) return UNKNOWN;
-  return {kind:'answer' as const,claims,sources:sources.flatMap((s,i)=>claims.some(c=>c.citations.includes(i+1))?[{number:i+1,document_id:s.document_id,version_id:s.version_id,page:s.page,title:s.title}]:[])};
+  if (sources.some(s=>{const current=visible.get(s.id);return !current || current.body!==s.body || current.revision!==s.revision || current.note_key!==s.note_key || current.section!==s.section || current.title!==s.title;})) return UNKNOWN;
+  return {kind:'answer' as const,claims,sources:sources.flatMap((s,i)=>claims.some(c=>c.citations.includes(i+1))?[{number:i+1,note_key:s.note_key,revision:s.revision,section:s.section,title:s.title}]:[])};
 }
