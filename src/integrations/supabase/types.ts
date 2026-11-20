@@ -1151,6 +1151,9 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      publish_house_markdown: { Args: { p_org: string; p_key: string; p_title: string; p_markdown: string }; Returns: string }
+      withdraw_house_markdown: { Args: { p_org: string; p_key: string }; Returns: undefined }
+      read_house_markdown: { Args: { p_org: string; p_terms: string[]; p_ids?: string[] }; Returns: Json }
       accept_invitation: { Args: { p_token: string }; Returns: Json }
       add_intent_comment: {
         Args: { p_body: string; p_intent_id: string }
