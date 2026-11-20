@@ -36,6 +36,20 @@
       "when": 1794118375102,
       "tag": "0004_intents_edit",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1795187476193,
+      "tag": "0005_request_evidence",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1795187484639,
+      "tag": "0006_wiki_sources",
+      "breakpoints": true
     }
   ]
 }

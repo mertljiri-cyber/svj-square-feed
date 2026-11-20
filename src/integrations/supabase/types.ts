@@ -845,6 +845,52 @@ export type Database = {
           },
         ]
       }
+      request_evidence: {
+        Row: {
+          document_id: string
+          linked_at: string
+          organization_id: string
+          request_id: string
+          version_id: string
+        }
+        Insert: {
+          document_id: string
+          linked_at?: string
+          organization_id: string
+          request_id: string
+          version_id: string
+        }
+        Update: {
+          document_id?: string
+          linked_at?: string
+          organization_id?: string
+          request_id?: string
+          version_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "request_evidence_document_id_version_id_fkey"
+            columns: ["document_id", "version_id"]
+            isOneToOne: false
+            referencedRelation: "document_versions"
+            referencedColumns: ["document_id", "id"]
+          },
+          {
+            foreignKeyName: "request_evidence_organization_id_document_id_fkey"
+            columns: ["organization_id", "document_id"]
+            isOneToOne: false
+            referencedRelation: "documents"
+            referencedColumns: ["organization_id", "id"]
+          },
+          {
+            foreignKeyName: "request_evidence_organization_id_request_id_fkey"
+            columns: ["organization_id", "request_id"]
+            isOneToOne: false
+            referencedRelation: "requests"
+            referencedColumns: ["organization_id", "id"]
+          },
+        ]
+      }
       requests: {
         Row: {
           asset_ref: string | null
@@ -1017,6 +1063,57 @@ export type Database = {
           },
         ]
       }
+      wiki_excerpts: {
+        Row: {
+          approved_at: string | null
+          body: string
+          document_id: string
+          id: string
+          note_key: string
+          organization_id: string
+          page: number
+          source_revision: string
+          version_id: string
+        }
+        Insert: {
+          approved_at?: string | null
+          body: string
+          document_id: string
+          id?: string
+          note_key: string
+          organization_id: string
+          page: number
+          source_revision: string
+          version_id: string
+        }
+        Update: {
+          approved_at?: string | null
+          body?: string
+          document_id?: string
+          id?: string
+          note_key?: string
+          organization_id?: string
+          page?: number
+          source_revision?: string
+          version_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "wiki_excerpts_document_id_version_id_fkey"
+            columns: ["document_id", "version_id"]
+            isOneToOne: false
+            referencedRelation: "document_versions"
+            referencedColumns: ["document_id", "id"]
+          },
+          {
+            foreignKeyName: "wiki_excerpts_organization_id_document_id_fkey"
+            columns: ["organization_id", "document_id"]
+            isOneToOne: false
+            referencedRelation: "documents"
+            referencedColumns: ["organization_id", "id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
@@ -1030,6 +1127,10 @@ export type Database = {
       add_request_comment: {
         Args: { p_body: string; p_internal?: boolean; p_request_id: string }
         Returns: number
+      }
+      attach_request_evidence: {
+        Args: { p_request_id: string; p_version_id: string }
+        Returns: undefined
       }
       authorize_download: { Args: { p_version_id: string }; Returns: Json }
       begin_upload: {
@@ -1166,6 +1267,10 @@ export type Database = {
       }
       revoke_role: { Args: { p_role_id: string }; Returns: undefined }
       revoke_scope: { Args: { p_grant_id: string }; Returns: undefined }
+      search_wiki_sources: {
+        Args: { p_limit?: number; p_organization_id: string; p_query: string }
+        Returns: Json
+      }
       set_document_lifecycle: {
         Args: {
           p_document_id: string
