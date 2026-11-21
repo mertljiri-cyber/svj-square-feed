@@ -1,4 +1,4 @@
-import { createClient } from 'npm:@supabase/supabase-js@2.89.0';
+import { createClient } from 'npm:@supabase/supabase-js@2';
 import { answerQuestion, queryVariants, type Source } from './core.ts';
 
 const headers = {'Access-Control-Allow-Origin':'*','Access-Control-Allow-Headers':'authorization, apikey, content-type, x-client-info','Access-Control-Allow-Methods':'POST, OPTIONS','Cache-Control':'no-store'};
