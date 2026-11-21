@@ -1,0 +1,33 @@
+.house-chat-launcher {
+  position: fixed;
+  z-index: 40;
+  right: max(1rem, env(safe-area-inset-right));
+  bottom: max(1rem, env(safe-area-inset-bottom));
+}
+
+.house-chat-dialog {
+  --chat-edge: .5rem;
+  position: fixed;
+  inset: auto max(var(--chat-edge), env(safe-area-inset-right))
+    max(var(--chat-edge), env(safe-area-inset-bottom), var(--chat-viewport-bottom, 0px)) auto;
+  margin: 0;
+  width: min(29rem, calc(100% - max(var(--chat-edge), env(safe-area-inset-right)) - max(var(--chat-edge), env(safe-area-inset-left))));
+  max-width: none;
+  height: min(42rem, calc(var(--chat-viewport-height, 100dvh) - 2 * var(--chat-edge)));
+  max-height: none;
+  border-radius: 1.25rem;
+  overflow: hidden;
+}
+
+.house-chat-dialog[open] {
+  display: flex;
+  flex-direction: column;
+}
+
+.house-chat-dialog::backdrop {
+  background: hsl(220 32% 14% / .32);
+}
+
+@media (min-width: 640px) {
+  .house-chat-dialog { --chat-edge: 1.5rem; }
+}

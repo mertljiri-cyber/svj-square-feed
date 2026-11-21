@@ -28,6 +28,7 @@ import Login from "./pages/Login";
 import Members from "./pages/Members";
 import { AuthProvider } from "./features/auth/AuthProvider";
 import { RequireMember } from "./features/auth/RequireMember";
+import { FloatingHouseChat } from "./features/FloatingHouseChat";
 
 const queryClient = new QueryClient();
 
@@ -63,6 +64,7 @@ const App = () => (
           <Route path="/formulare/:id" element={<RequireMember><FormDetail /></RequireMember>} />
           <Route path="*" element={<NotFound />} />
         </Routes>
+        <FloatingHouseChat />
       </BrowserRouter>
       </AuthProvider>
     </TooltipProvider>
