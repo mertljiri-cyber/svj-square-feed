@@ -1,14 +1,18 @@
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { supabase } from '@/integrations/supabase/client';
+import { HouseSourceInventory } from './HouseSourceInventory';
+import { useQueryClient } from '@tanstack/react-query';
 
 export function HouseMarkdownImport({ org }: {org: string}) {
+  const queryClient = useQueryClient();
   const [note,setNote]=useState<{key:string; body:string}|null>(null);
   const [confirmed,setConfirmed]=useState(false);
   const [status,setStatus]=useState('');
   const [busy,setBusy]=useState(false);
   return <details className="space-y-3 rounded-xl border p-4">
     <summary className="cursor-pointer font-medium">Správa zdrojů wiki</summary>
+    <HouseSourceInventory org={org}/>
     <p className="text-sm text-muted-foreground">Vyberte schválenou poznámku .md určenou všem aktivním členům SVJ. Nevkládejte soukromou korespondenci, osobní údaje ani interní odkazy. Výňatky může zpracovat poskytovatel AI.</p>
     <label className="block">Poznámka .md <input type="file" accept=".md" disabled={busy} onChange={async e=>{
       const f=e.target.files?.[0];setConfirmed(false);setNote(null);setStatus('');
@@ -26,11 +30,12 @@ export function HouseMarkdownImport({ org }: {org: string}) {
           const {error}=await supabase.rpc('publish_house_markdown',{p_org:org,p_key:note.key,p_title:title,p_markdown:note.body});
           if(error)throw error;
           setStatus('Poznámka je aktivní pro dotazy.');setConfirmed(false);
+          void queryClient.invalidateQueries({queryKey: ['house-source-metadata']});
         } catch {setStatus('Poznámku se nepodařilo zveřejnit.');} finally {setBusy(false);}
       }}>Schválit poznámku pro chat</Button>
       <Button variant="outline" className="ml-2" disabled={busy} onClick={async()=>{
         setBusy(true);setStatus('');
-        try {const {error}=await supabase.rpc('withdraw_house_markdown',{p_org:org,p_key:note.key});if(error)throw error;setStatus('Poznámka je stažená z chatu.');setConfirmed(false);} catch {setStatus('Poznámku se nepodařilo stáhnout.');} finally {setBusy(false);}
+        try {const {error}=await supabase.rpc('withdraw_house_markdown',{p_org:org,p_key:note.key});if(error)throw error;setStatus('Poznámka je stažená z chatu.');setConfirmed(false);void queryClient.invalidateQueries({queryKey: ['house-source-metadata']});} catch {setStatus('Poznámku se nepodařilo stáhnout.');} finally {setBusy(false);}
       }}>Stáhnout tuto poznámku z chatu</Button>
     </>}
     {status&&<p role="status">{status}</p>}

@@ -21,5 +21,5 @@ export async function answerQuestion(question: string, deps: {search: (question:
   }
   const visible = new Map((await deps.recheck(sources.map(s=>s.id))).map(s=>[s.id,s]));
   if (sources.some(s=>{const current=visible.get(s.id);return !current || current.body!==s.body || current.revision!==s.revision || current.note_key!==s.note_key || current.section!==s.section || current.title!==s.title;})) return UNKNOWN;
-  return {kind:'answer' as const,claims,sources:sources.flatMap((s,i)=>claims.some(c=>c.citations.includes(i+1))?[{number:i+1,note_key:s.note_key,revision:s.revision,section:s.section,title:s.title}]:[])};
+  return {kind:'answer' as const,claims,sources:sources.flatMap((s,i)=>claims.some(c=>c.citations.includes(i+1))?[{number:i+1,id:s.id,note_key:s.note_key,revision:s.revision,section:s.section,title:s.title}]:[])};
 }

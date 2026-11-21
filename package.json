@@ -9,7 +9,10 @@
     "build:dev": "vite build --mode development",
     "lint": "eslint .",
     "preview": "vite preview",
-    "test": "vitest run"
+    "test": "vitest run",
+    "local": "vite build --mode local-fixtures && vite preview --mode local-fixtures --host 127.0.0.1 --port 4174 --strictPort",
+    "local:build": "vite build --mode local-fixtures",
+    "local:preview": "vite preview --mode local-fixtures --host 127.0.0.1 --port 4174 --strictPort"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",

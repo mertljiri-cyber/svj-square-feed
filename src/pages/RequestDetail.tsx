@@ -28,17 +28,17 @@ function RequestDetailInner() {
   const [reopenReason, setReopenReason] = useState("");
   const [t, setT] = useState({ to: "", note: "", assignee: "", due: "", resolution: "", duplicateNumber: "", priority: "" });
 
-  const { data: request, isLoading } = useQuery({
-    queryKey: ["request", id],
+  const { data: request, isLoading, error } = useQuery({
+    queryKey: ["request", id, userId, orgId],
     queryFn: async () => {
-      const { data, error } = await supabase.from("requests").select("*").eq("id", id!).maybeSingle();
+      const { data, error } = await supabase.from("requests").select("*").eq("id", id!).eq("organization_id", orgId).maybeSingle();
       if (error) throw error;
       return data;
     },
     enabled: !!id,
   });
   const { data: events = [] } = useQuery({
-    queryKey: ["request-events", id],
+    queryKey: ["request-events", id, userId, orgId],
     queryFn: async () => {
       const { data, error } = await supabase.from("request_events").select("*").eq("request_id", id!).order("occurred_at");
       if (error) throw error;
@@ -47,7 +47,7 @@ function RequestDetailInner() {
     enabled: !!request,
   });
   const { data: members = [] } = useQuery({
-    queryKey: ["members", orgId],
+    queryKey: ["members", orgId, userId],
     queryFn: async () => {
       const { data, error } = await supabase.rpc("list_members", { p_organization_id: orgId });
       if (error) throw error;
@@ -73,6 +73,7 @@ function RequestDetailInner() {
   }
 
   if (isLoading) return <Layout><div className="page-container py-12 text-muted-foreground">Načítání…</div></Layout>;
+  if (error) return <Layout><div className="page-container py-12"><p role="alert" className="text-destructive">Požadavek se nepodařilo načíst.</p><Link className="mt-4 inline-block text-primary underline" to="/pozadavky">Zpět na požadavky</Link></div></Layout>;
   if (!request) {
     return <Layout><div className="page-container py-12"><h1 className="text-2xl font-bold">Požadavek nenalezen</h1><Link className="mt-4 inline-block text-primary underline" to="/pozadavky">Zpět na požadavky</Link></div></Layout>;
   }
@@ -119,6 +120,8 @@ function RequestDetailInner() {
                 <div><dt className="text-muted-foreground">Technický prvek</dt><dd>{asset ? <Link className="text-primary underline" to={`/technicky-prehled/${asset.id}`}>{asset.id} · {asset.name}</Link> : request.asset_ref || "Bez vazby"}</dd></div>
                 <div><dt className="text-muted-foreground">Řešitel</dt><dd>{request.assignee_user_id ? (assigneeName?.display_name || assigneeName?.email || (isAssignee ? "Vy" : "Přidělen")) : "Nepřidělen"}</dd></div>
                 <div><dt className="text-muted-foreground">Termín</dt><dd>{request.due_on ? new Date(request.due_on).toLocaleDateString("cs-CZ") : "Neurčen"}</dd></div>
+                <div><dt className="text-muted-foreground">Podáno</dt><dd><time dateTime={request.created_at}>{fmt(request.created_at)}</time></dd></div>
+                <div><dt className="text-muted-foreground">Poslední změna</dt><dd><time dateTime={request.updated_at}>{fmt(request.updated_at)}</time></dd></div>
                 {isBoard && <div><dt className="text-muted-foreground">Priorita (interní)</dt><dd>{request.triage_priority ? priorityLabels[request.triage_priority] : "Neurčena"}</dd></div>}
               </dl>
               {request.resolution_text && <div className="mt-5 rounded-lg border border-primary/30 p-4 text-sm"><p className="font-medium">Výsledek řešení</p><p className="mt-1 whitespace-pre-wrap">{request.resolution_text}</p></div>}
@@ -199,5 +202,7 @@ function RequestDetailInner() {
 }
 
 export default function RequestDetail() {
-  return <RequireMember><RequestDetailInner /></RequireMember>;
+  const {session, activeMembership} = useAuth();
+  const {id} = useParams();
+  return <RequireMember><RequestDetailInner key={`${session?.user.id}:${activeMembership?.organization_id}:${id}`} /></RequireMember>;
 }
