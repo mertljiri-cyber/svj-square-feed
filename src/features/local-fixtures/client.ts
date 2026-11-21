@@ -9,7 +9,7 @@ export const fixture = {
   audit: [{id: 1, organization_id: 'synthetic-org', action: 'publish_house_markdown', object_type: 'house_markdown', object_id: 'opravy', occurred_at: '2026-11-21T00:00:00.000Z', details: {revision: 'a'.repeat(64)}}] as Record<string, unknown>[],
 };
 export const user = () => fixture.role === 'board' ? 'synthetic-board' : fixture.role === 'other' ? 'synthetic-other' : 'synthetic-owner';
-const source: Source = {id: 'opravy:' + 'a'.repeat(64) + ':3', note_key: 'opravy', revision: 'a'.repeat(64), title: 'Syntetické opravy', section: 'Zvonky', body: 'V modelovém domě byla schválena výměna zvonků. Termín realizace zatím není stanoven.'};
+const source: Source = {id: 'opravy:' + 'a'.repeat(64) + ':3', note_key: 'opravy', revision: 'a'.repeat(64), title: 'Syntetické opravy', section: 'Zvonky', path: 'opravy/zvonky.md', body: 'V modelovém domě byla schválena výměna zvonků. Termín realizace zatím není stanoven.'};
 const readable = (row: Record<string, unknown>) => row.organization_id === 'synthetic-org' && (fixture.role === 'board' || row.author_user_id === user());
 function rows(table: string): Record<string, unknown>[] {
   if (table === 'requests') return fixture.requests.filter(readable);
@@ -42,7 +42,6 @@ class Query {
   }
 }
 async function rpc(name: string, p: Record<string, unknown> = {}) {
-  if (name === 'read_house_markdown') return {data: fixture.active && p.p_org === 'synthetic-org' && Array.isArray(p.p_ids) && p.p_ids.includes(source.id) ? [{...source}] : [], error: null};
   if (name === 'create_request') {
     fixture.calls++;
     const existing = fixture.requests.find(r => r.idempotency_key === p.p_idempotency_key && r.author_user_id === user());
@@ -63,10 +62,12 @@ async function rpc(name: string, p: Record<string, unknown> = {}) {
 }
 const adapter = {
   from: (table: string) => new Query(table), rpc,
-  functions: {invoke: async (_name: string, options: {body: {question: string}}) => {
+  functions: {invoke: async (_name: string, {body}: {body: {organization_id: string; question?: string; citation_id?: string}}) => {
+    const readable = () => fixture.active && body.organization_id === 'synthetic-org' && fixture.role !== 'other-org' && fixture.role !== 'guest';
+    if (body.citation_id !== undefined) return {data: {source: readable() && body.citation_id === source.id ? {...source} : null}, error: null};
     await new Promise(resolve => setTimeout(resolve, 650));
     if (['error', 'limit'].includes(fixture.scenario)) return {data: null, error: {context: {status: fixture.scenario === 'limit' ? 429 : 503}}};
-    return {data: await answerQuestion(options.body.question, {search: async () => fixture.active && fixture.scenario !== 'unknown' ? [source] : [], recheck: async () => fixture.active ? [source] : [], generate: async () => ({kind: 'answer', claims: [{text: source.body, citations: [1]}]})}), error: null};
+    return {data: await answerQuestion(body.question ?? '', {search: async () => readable() && fixture.scenario !== 'unknown' ? [source] : [], recheck: async () => readable() ? [source] : [], generate: async () => ({kind: 'answer', claims: [{text: source.body, citations: [1]}]})}), error: null};
   }},
 };
 export const supabase = adapter as unknown as SupabaseClient<Database>;
