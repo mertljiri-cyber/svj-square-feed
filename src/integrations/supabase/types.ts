@@ -1199,6 +1199,10 @@ export type Database = {
         Returns: number
       }
       complete_upload: { Args: { p_version_id: string }; Returns: Json }
+      consume_house_citation: {
+        Args: { p_organization_id: string }
+        Returns: undefined
+      }
       consume_house_question: {
         Args: { p_organization_id: string }
         Returns: undefined
@@ -1235,6 +1239,7 @@ export type Database = {
         }
         Returns: Json
       }
+      get_house_file_release: { Args: { p_org: string }; Returns: Json }
       grant_document_access: {
         Args: { p_document_id: string; p_permission: string; p_user_id: string }
         Returns: string
@@ -1331,6 +1336,10 @@ export type Database = {
           p_to: string
         }
         Returns: number
+      }
+      set_house_file_release: {
+        Args: { p_manifest_sha256: string; p_org: string; p_release: string }
+        Returns: undefined
       }
       set_membership_status: {
         Args: {
